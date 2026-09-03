@@ -1,0 +1,174 @@
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  * {
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+    font-family: monospace;
+  }
+  [hidden] {
+    display: none !important;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      interpolate-size: allow-keywords;
+    }
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    font-size: 20px;
+    scrollbar-gutter: stable;
+    overscroll-behavior: contain;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: 100svh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smooth: always;
+    text-rendering: optimizeLegibility;
+    line-height: 1.5;
+    background-color: #eee;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.1;
+    text-wrap: balance;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg,
+  embed,
+  iframe,
+  object,
+  audio {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  svg[width][height] {
+    max-width: revert;
+  }
+
+  button {
+    background: none;
+    border: none;
+
+    &:disabled {
+      cursor: unset;
+    }
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  button,
+  [role='button'],
+  label,
+  summary,
+  select {
+    cursor: pointer;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  th {
+    font-weight: inherit;
+  }
+
+  fieldset {
+    border: none;
+    padding: 0;
+  }
+
+  sub,
+  sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+
+  pre,
+  code,
+  kbd,
+  samp {
+    font-family: monospace;
+    font-size: inherit;
+  }
+
+  blockquote,
+  q {
+    quotes: none;
+  }
+  blockquote::before,
+  blockquote::after,
+  q::before,
+  q::after {
+    content: none;
+  }
+
+  #root {
+    isolation: isolate;
+  }
+}

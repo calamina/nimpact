@@ -1,0 +1,37 @@
+@layer utils {
+  .box {
+    border: 1px solid #00000053;
+    border-radius: 4px;
+    box-shadow: #00000006 0px 8px 24px;
+
+    &.box-high {
+      border-color: slateblue;
+      box-shadow: #6a5acd0a 0px 8px 24px;
+    }
+  }
+
+  button:focus-visible:not(:disabled),
+  button:hover:not(:disabled) {
+    outline: 2px solid slateblue;
+
+    &.box {
+      border-color: transparent;
+    }
+  }
+
+  .old {
+    opacity: 0.25;
+  }
+
+  .high {
+    color: slateblue;
+  }
+
+  .alt {
+    color: peru;
+  }
+
+  .low {
+    opacity: 0.35;
+  }
+}
