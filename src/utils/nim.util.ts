@@ -13,9 +13,6 @@ export interface BattleResult {
   } | null
 }
 
-/**
- * Creates a Nimpacter from a raw Nim creation model.
- */
 export function createNimpacter(nim: Nim): Nimpacter {
   const fightStatsList: NimStatFight[] = nim.stats.map((stat) => {
     const baseVal = 'total' in stat ? stat.total : (stat as { value: number }).value
@@ -46,12 +43,10 @@ export function createNimpacter(nim: Nim): Nimpacter {
     name: nim.name,
     items: nim.items.map(mapItem),
     stats,
+    wins: 0,
   }
 }
 
-/**
- * Explicit mapper to duplicate a Nimpacter safely without Proxy issues.
- */
 export function mapNimpacter(source: Nimpacter): Nimpacter {
   return {
     id: source.id,
@@ -62,6 +57,7 @@ export function mapNimpacter(source: Nimpacter): Nimpacter {
       ATK: mapStat(source.stats.ATK),
       DEF: mapStat(source.stats.DEF),
     },
+    wins: source.wins,
   }
 }
 
@@ -85,9 +81,6 @@ function mapStat(stat: NimStatFight): NimStatFight {
   }
 }
 
-/**
- * Recalculates total stats and returns a clean, fully-healed copy.
- */
 export function recalculateNimpacter(nimpacter: Nimpacter): Nimpacter {
   const clean = mapNimpacter(nimpacter)
   const statKeys: Stat[] = ['HP', 'ATK', 'DEF']
@@ -102,11 +95,12 @@ export function recalculateNimpacter(nimpacter: Nimpacter): Nimpacter {
     stat.current = stat.total
   })
 
+  clean.wins++
+
   return clean
 }
 
 export function resolveBattle(p1Input: Nimpacter, p2Input: Nimpacter): BattleResult {
-  // Use explicit mapper to decouple from Pinia Proxy state
   const p1 = mapNimpacter(p1Input)
   const p2 = mapNimpacter(p2Input)
 

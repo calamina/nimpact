@@ -43,7 +43,7 @@ onMounted(() => emit('item', item.value))
     <p class="low">They possess</p>
     <p>
       {{ item.name }}
-      <span class="bonus">({{ item.value }} {{ item.type }})</span>
+      <span class="color-item">({{ item.value }} {{ item.type }})</span>
     </p>
   </div>
 </template>
@@ -52,9 +52,5 @@ onMounted(() => emit('item', item.value))
 .item {
   display: flex;
   flex-direction: column;
-}
-
-.bonus {
-  color: slateblue;
 }
 </style>

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, markRaw } from 'vue'
 import type { Item, Nim, Nimpacter, NimStatBonus } from '@/models/nim.model'
 import { createNimpacter, mapNimpacter, resolveBattle } from '@/utils/nim.util'
 
@@ -26,6 +26,7 @@ export interface Day {
   outcome: 'victory' | 'stalemate' | 'unfortunate'
   phase: DayPhase
   type: DayType
+  tier: number | null
   rewards: {
     item: Item | null
     stat: NimStatBonus
@@ -33,28 +34,55 @@ export interface Day {
 }
 
 export const useNimStore = defineStore('nim', () => {
-  const days = ref<Day[]>([])
-  const currentDay = computed(() => days.value[days.value.length - 1])
+  const completedDays = ref<Day[]>([])
+  const activeDay = ref<Day | null>(null)
 
-  const winnerQueue = ref<Nimpacter[]>([])
+  const days = computed(() => {
+    return activeDay.value ? [...completedDays.value, activeDay.value] : completedDays.value
+  })
+
+  const currentDay = computed(() => activeDay.value)
+  const autofight = ref(false)
+  const winnerQueue = ref<Record<number, Nimpacter[]>>({})
 
   const init = () => {
-    if (days.value.length === 0) startNewDay()
+    if (!activeDay.value && completedDays.value.length === 0) {
+      startNewDay()
+    }
+  }
+
+  const setAutofight = () => (autofight.value = !autofight.value)
+
+  const findEligibleWinTier = (): number | null => {
+    const tiers = Object.keys(winnerQueue.value)
+      .map(Number)
+      .sort((a, b) => a - b)
+
+    for (const tier of tiers) {
+      if ((winnerQueue.value[tier]?.length ?? 0) >= 2) {
+        return tier
+      }
+    }
+    return null
   }
 
   const startNewDay = () => {
-    const isWinnership = winnerQueue.value.length >= 2
+    const targetTier = findEligibleWinTier()
+    const isWinnership = targetTier !== null
     let activeFighters: Nimpacter[] = []
 
-    if (isWinnership) {
-      const [f1, f2] = winnerQueue.value.splice(0, 2)
+    if (isWinnership && targetTier !== null) {
+      const queue = winnerQueue.value[targetTier]
+      const f1 = queue?.[0]
+      const f2 = queue?.[1]
+
       if (f1 && f2) {
         activeFighters = [mapNimpacter(f1), mapNimpacter(f2)]
       }
     }
 
-    days.value.push({
-      id: days.value.length + 1,
+    activeDay.value = {
+      id: completedDays.value.length + 1,
       nims: [],
       nimpacters: activeFighters,
       winner: null,
@@ -63,56 +91,75 @@ export const useNimStore = defineStore('nim', () => {
       phase: isWinnership ? DayPhase.READY : DayPhase.CREATING,
       rewards: null,
       type: isWinnership ? DayType.WINNERSHIP : DayType.CLASSIC,
-    })
+      tier: targetTier,
+    }
   }
 
   const addNimToDay = (nim: Nim, id: number) => {
-    const day = currentDay.value
-    if (!day) return
+    if (!activeDay.value) return
 
-    day.nims[id - 1] = nim
+    activeDay.value.nims[id - 1] = nim
 
-    if (day.nims.filter(Boolean).length === 2) {
-      day.phase = DayPhase.READY
+    if (activeDay.value.nims.filter(Boolean).length === 2) {
+      activeDay.value.phase = DayPhase.READY
     }
   }
 
   const startFightForDay = () => {
-    const day = currentDay.value
-    if (!day) return
+    if (!activeDay.value) return
 
-    if (day.nimpacters.length !== 2) {
-      day.nimpacters = day.nims.map(createNimpacter)
+    if (activeDay.value.nimpacters.length !== 2) {
+      activeDay.value.nimpacters = activeDay.value.nims.map(createNimpacter)
     }
 
-    day.phase = DayPhase.FIGHTING
+    activeDay.value.phase = DayPhase.FIGHTING
   }
 
   const finalizeBattle = async () => {
-    const day = currentDay.value
-    if (!day || day.nimpacters.length < 2) return
+    if (!activeDay.value || activeDay.value.nimpacters.length < 2) return
 
-    const [p1, p2] = day.nimpacters
+    const [p1, p2] = activeDay.value.nimpacters
     if (!p1 || !p2) return
 
     const result = resolveBattle(p1, p2)
 
-    day.outcome = result.outcome
-    day.winner = result.winner
-    day.loser = result.loser
-    day.rewards = result.rewards
-    day.phase = DayPhase.RESULT
+    activeDay.value.outcome = result.outcome
+    activeDay.value.winner = result.winner
+    activeDay.value.loser = result.loser
+    activeDay.value.rewards = result.rewards
+    activeDay.value.phase = DayPhase.END
 
-    if (result.winner) {
-      winnerQueue.value.push(result.winner)
+    if (result.winner && result.loser) {
+      const winner = result.winner
+      const loser = result.loser
+
+      removeFromQueue(loser.id)
+      removeFromQueue(winner.id)
+
+      const newWinnerTier = winner.wins
+      if (!winnerQueue.value[newWinnerTier]) {
+        winnerQueue.value[newWinnerTier] = []
+      }
+      winnerQueue.value[newWinnerTier].push(winner)
+    } else {
+      removeFromQueue(p1.id)
+      removeFromQueue(p2.id)
     }
 
-    await new Promise((r) => setTimeout(r, 1000))
-    day.phase = DayPhase.END
+    completedDays.value.push(markRaw(activeDay.value))
+    activeDay.value = null
+  }
+
+  const removeFromQueue = (fighterId: string) => {
+    for (const tier in winnerQueue.value) {
+      winnerQueue.value[tier] = (winnerQueue.value[tier] ?? []).filter((n) => n.id !== fighterId)
+    }
   }
 
   return {
     days,
+    activeDay,
+    completedDays,
     currentDay,
     winnerQueue,
     init,
@@ -120,5 +167,7 @@ export const useNimStore = defineStore('nim', () => {
     addNimToDay,
     startFightForDay,
     finalizeBattle,
+    autofight,
+    setAutofight,
   }
 })

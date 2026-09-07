@@ -1,27 +1,16 @@
 <script setup lang="ts">
 import { useTimelineTransition } from '@/composables/appTransitions'
-const { timelineBeforeEnter, timelineEnter } = useTimelineTransition()
+import { computed } from 'vue'
+const { timelineBeforeEnter, timelineEnter, timelineEnterNoscroll } = useTimelineTransition()
 
-const { appear, group } = defineProps<{ appear?: boolean; group?: boolean }>()
+const { appear, noscroll } = defineProps<{ appear?: boolean; noscroll?: boolean }>()
+
+const enter = computed(() => (noscroll ? timelineEnterNoscroll : timelineEnter))
 </script>
 
 <template>
-  <Transition
-    v-if="!group"
-    :css="false"
-    @before-enter="timelineBeforeEnter"
-    @enter="timelineEnter"
-    :appear
-  >
+  <Transition :css="false" @before-enter="timelineBeforeEnter" @enter="enter" :appear>
+    <!-- @enter="noscroll ? timelineEnterNoscroll : timelineEnter" -->
     <slot />
   </Transition>
-  <TransitionGroup
-    v-else
-    :css="false"
-    @before-enter="timelineBeforeEnter"
-    @enter="timelineEnter"
-    :appear
-  >
-    <slot />
-  </TransitionGroup>
 </template>

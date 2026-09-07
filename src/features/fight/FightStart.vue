@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useNimStore, type Day } from '@/store/nims'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const { day } = defineProps<{
   day: Day
@@ -17,6 +17,10 @@ function handleStart() {
 const resultMessage = computed(() =>
   day.phase === 2 ? 'They are squaring up !' : 'The fight ended ...',
 )
+
+onMounted(() => {
+  if (store.autofight) handleStart()
+})
 </script>
 
 <template>
@@ -39,8 +43,8 @@ const resultMessage = computed(() =>
 
 .lines {
   height: 2rem;
-  border-left: 1px solid #00000053;
-  border-right: 1px solid #00000053;
+  border-left: 1px solid #00000035;
+  border-right: 1px solid #00000035;
   width: 24rem;
   flex-shrink: 0;
 }

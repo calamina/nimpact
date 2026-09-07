@@ -28,7 +28,7 @@ onMounted(() => runBattle())
       <div class="window">
         <span
           class="status"
-          :class="{ fighting: battleState === 'FIGHTING' }"
+          :class="{ fighting: battleState === 'FIGHTING', finished: battleState === 'FINISHED' }"
           :style="{ '--timer': timer }"
         ></span>
       </div>
@@ -49,7 +49,7 @@ onMounted(() => runBattle())
   flex-shrink: 0;
   height: 2rem;
   width: 1px;
-  background-color: #00000053;
+  background-color: #00000035;
 }
 
 .screen {
@@ -68,8 +68,8 @@ onMounted(() => runBattle())
   flex-shrink: 0;
   padding: 1rem;
   width: 100%;
-  border-left: 1px solid #00000053;
-  border-right: 1px solid #00000053;
+  border-left: 1px solid #00000035;
+  border-right: 1px solid #00000035;
 }
 
 .status {
@@ -81,6 +81,9 @@ onMounted(() => runBattle())
 
   &.fighting {
     animation: fighting var(--timer) cubic-bezier(0.6, 0, 0.6, 1) infinite;
+  }
+  &.finished {
+    background-color: #00000035;
   }
 }
 

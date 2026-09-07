@@ -27,14 +27,14 @@ const onIdentityCreated = async (id: string, name: string) => {
   draftNim.value = { id, name }
   createState.value = 'ID'
 
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await new Promise((resolve) => setTimeout(resolve, 700))
   createState.value = 'STATS'
 }
 
 const onStatsCreated = async (stats: NimStat[]) => {
   draftNim.value.stats = stats
 
-  await new Promise((resolve) => setTimeout(resolve, 500))
+  await new Promise((resolve) => setTimeout(resolve, 250))
   createState.value = 'ITEM'
 }
 

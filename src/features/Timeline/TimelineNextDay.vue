@@ -2,7 +2,7 @@
 import { useNimStore, type Day } from '@/store/nims'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/all'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 gsap.registerPlugin(ScrollToPlugin)
 
@@ -34,6 +34,10 @@ const next = async () => {
     ease: 'sine.out',
   })
 }
+
+onMounted(() => {
+  if (store.autofight) next()
+})
 </script>
 
 <template>
@@ -61,6 +65,6 @@ p {
 .line {
   height: 100%;
   width: 1px;
-  background-color: #00000053;
+  background-color: #00000035;
 }
 </style>

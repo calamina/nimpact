@@ -12,7 +12,7 @@ export function useTimelineTransition() {
 
   const timelineEnter = (el: Element, done: () => void) => {
     const target = el as HTMLElement
-    const container = target.closest('.timeline-container') as HTMLElement
+    const container = target.closest('.timeline-view') as HTMLElement
 
     if (container) {
       gsap.to(container, {
@@ -28,9 +28,6 @@ export function useTimelineTransition() {
         opacity: 1,
         duration: 0.2,
         ease: 'power2.out',
-        onComplete: () => {
-          gsap.set(target, { clearProps: 'height,overflow' })
-        },
       })
       .to(
         window,
@@ -44,8 +41,20 @@ export function useTimelineTransition() {
       )
   }
 
+  const timelineEnterNoscroll = (el: Element, done: () => void) => {
+    const target = el as HTMLElement
+
+    gsap.to(target, {
+      opacity: 1,
+      duration: 0.2,
+      ease: 'power2.out',
+      onComplete: done,
+    })
+  }
+
   return {
     timelineBeforeEnter,
     timelineEnter,
+    timelineEnterNoscroll,
   }
 }

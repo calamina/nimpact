@@ -14,7 +14,7 @@ const vanquished = computed(() => nim.stats.HP.current === 0)
     <div class="info">
       <p class="name">{{ nim.name }}</p>
       <p>
-        <span class="high">{{ nim.stats.HP.current }}</span>
+        <span class="color-main">{{ nim.stats.HP.current }}</span>
         <span class="low">/{{ nim.stats.HP.total }}</span>
       </p>
     </div>
@@ -27,11 +27,11 @@ const vanquished = computed(() => nim.stats.HP.current === 0)
     <div class="info">
       <p>
         <span class="low">{{ 'ATK ' }}</span>
-        <span class="high">{{ nim.stats.ATK.total }}</span>
+        <span class="color-main">{{ nim.stats.ATK.total }}</span>
       </p>
       <p>
         <span class="low">{{ 'DEF ' }}</span>
-        <span class="high">{{ nim.stats.DEF.total }}</span>
+        <span class="color-main">{{ nim.stats.DEF.total }}</span>
       </p>
     </div>
   </div>
@@ -58,7 +58,7 @@ const vanquished = computed(() => nim.stats.HP.current === 0)
   border-radius: 4px;
   position: relative;
   overflow: clip;
-  background-color: #00000025;
+  background-color: #00000035;
 
   &:after {
     content: '';
@@ -72,7 +72,7 @@ const vanquished = computed(() => nim.stats.HP.current === 0)
 }
 
 .vanquished {
-  .high,
+  .color-main,
   .low,
   .name {
     color: #000;

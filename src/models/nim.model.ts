@@ -34,6 +34,7 @@ export interface Nimpacter {
   name: string
   items: Item[]
   stats: Record<Stat, NimStatFight>
+  wins: number
 }
 
 export type Stat = 'HP' | 'ATK' | 'DEF'

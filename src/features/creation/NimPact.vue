@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useNimStore } from '@/store/nims'
 import { adjectives, names, uniqueNamesGenerator } from 'unique-names-generator'
+import { onMounted } from 'vue'
 
 const store = useNimStore()
 
@@ -16,6 +17,10 @@ const name = uniqueNamesGenerator({
   length: 2,
   style: 'capital',
   seed: 0,
+})
+
+onMounted(() => {
+  if (store.autofight) emit('id', id, name)
 })
 </script>
 

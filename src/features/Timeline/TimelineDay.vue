@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import { DayType, type Day } from '@/store/nims'
-import { computed } from 'vue'
+import { type Day } from '@/store/nims'
 const { day } = defineProps<{ day: Day }>()
 
-const winnerDay = computed(() => day.type === DayType.WINNERSHIP)
+const TIERS = {
+  1: 'Winners',
+  2: 'Champions',
+  3: 'Heroes',
+  4: 'Legends',
+  5: 'Demi-gods',
+  6: '???',
+} as const
+
+type TierKey = keyof typeof TIERS
 </script>
 
 <template>
   <div class="wrap">
-    <p class="day box" :class="{ 'box-high': winnerDay }">
-      Day {{ day.id }}<span v-if="winnerDay" class="high"> : Winnership !</span>
-    </p>
-    <div class="line" :class="{ 'line-high': winnerDay }"></div>
-    <div class="lines" :class="{ 'line-high': winnerDay }"></div>
+    <h2 :id="'day' + day.id" class="day box" :class="{ 'box-color-main': day.tier }">
+      Day {{ day.id }}
+      <span v-if="day.tier" class="color-main">{{ TIERS[day.tier as TierKey] }}'s fight !</span>
+    </h2>
+    <div class="line"></div>
+    <div class="lines"></div>
   </div>
 </template>
 
@@ -27,20 +36,22 @@ const winnerDay = computed(() => day.type === DayType.WINNERSHIP)
 
 .day {
   padding: 1rem;
-  position: sticky;
-  top: 2rem;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  scroll-margin-top: 2rem;
 }
 
 .line {
   height: 100%;
   width: 1px;
-  background-color: #00000053;
+  background-color: #00000035;
 }
 
 .lines {
   height: 100%;
   width: 100%;
-  border: 1px solid #00000053;
+  border: 1px solid #00000035;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   border-bottom: none;

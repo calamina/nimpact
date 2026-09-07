@@ -26,24 +26,24 @@ const resultMessage = computed(() => MESSAGES[outcome.value])
       <div v-if="outcome === 'victory' && winner" class="victory">
         <p class="winner">{{ resultMessage }}</p>
         <div class="info">
-          <p class="high">{{ winner.name }}</p>
+          <p class="color-main">{{ winner.name }}</p>
 
           <div v-if="rewards?.item">
             <p class="low">They stole an item</p>
             <p>
               {{ rewards.item.name }}
-              <span class="high">({{ rewards.item.value }} {{ rewards.item.type }})</span>
+              <span class="color-item">({{ rewards.item.value }} {{ rewards.item.type }})</span>
             </p>
           </div>
 
           <div v-if="rewards?.stat">
             <p class="low">They learned something</p>
-            <p class="high">+ {{ rewards.stat.value }} {{ rewards.stat.type }}</p>
+            <p class="color-exp">+ {{ rewards.stat.value }} {{ rewards.stat.type }}</p>
           </div>
         </div>
       </div>
 
-      <p v-else class="unfortunate high">
+      <p v-else class="unfortunate">
         {{ resultMessage }}
       </p>
     </div>
@@ -62,7 +62,7 @@ const resultMessage = computed(() => MESSAGES[outcome.value])
   flex-shrink: 0;
   height: 2rem;
   width: 1px;
-  background-color: #00000053;
+  background-color: #00000035;
 }
 
 .screen {

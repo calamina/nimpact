@@ -2,4 +2,8 @@
 @import url('./utils.css');
 
 /* @layer reset, defaults, patterns, components, utilities, overrides; */
+/* @layer reset, default, utilities; */
 @layer reset, utilities;
+
+/* @layer default {
+} */

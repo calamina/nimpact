@@ -1,34 +1,37 @@
 @layer utils {
   .box {
-    border: 1px solid #00000053;
+    border: 1px solid #00000035;
     border-radius: 4px;
-    box-shadow: #00000006 0px 8px 24px;
+    box-shadow: #00000005 0px 8px 24px;
+    outline: 1px solid #00000015;
+    outline-offset: 3px;
 
-    &.box-high {
+    &.box-color-main {
       border-color: slateblue;
       box-shadow: #6a5acd0a 0px 8px 24px;
+      outline-color: #6a5acd55;
     }
   }
 
   button:focus-visible:not(:disabled),
   button:hover:not(:disabled) {
     outline: 2px solid slateblue;
-
-    &.box {
-      border-color: transparent;
-    }
   }
 
   .old {
     opacity: 0.25;
   }
 
-  .high {
+  .color-main {
     color: slateblue;
   }
 
-  .alt {
+  .color-item {
     color: peru;
+  }
+
+  .color-exp {
+    color: mediumseagreen;
   }
 
   .low {
