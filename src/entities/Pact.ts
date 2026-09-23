@@ -61,17 +61,23 @@ export class Pact {
   }
 
   receiveItem(incomingItem: Item): Item {
-    const existingIndex = this.items.findIndex((item) => item.type === incomingItem.type)
+    let currentItem = incomingItem
 
-    if (existingIndex !== -1) {
-      const existingItem = this.items[existingIndex]!
-      const upgraded = Item.reforge(existingItem, incomingItem)
-      this.items[existingIndex] = upgraded
-      return upgraded
-    } else {
-      this.items.push(incomingItem)
-      return incomingItem
+    while (true) {
+      const existingIndex = this.items.findIndex((item) => item.type === currentItem.type)
+
+      if (existingIndex !== -1) {
+        const [existingItem] = this.items.splice(existingIndex, 1)
+        if (existingItem) {
+          currentItem = Item.reforge(existingItem, currentItem)
+        }
+      } else {
+        break
+      }
     }
+
+    this.items.push(currentItem)
+    return currentItem
   }
 
   recalculate(): void {

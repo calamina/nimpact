@@ -1,0 +1,47 @@
+import { Pact } from './Pact'
+
+export class BattleQueue {
+  queues: Record<number, Pact[]> = {}
+
+  add(fighter: Pact): void {
+    const tier = fighter.wins
+    if (!this.queues[tier]) this.queues[tier] = []
+    this.queues[tier].push(fighter)
+  }
+
+  remove(fighterId: string): void {
+    for (const tier in this.queues) {
+      this.queues[tier] = (this.queues[tier] ?? []).filter((f) => f.id !== fighterId)
+    }
+  }
+
+  update(winner: Pact | null, pacts: Pact[]): void {
+    const [p1, p2] = pacts
+    if (!p1 || !p2) return
+
+    this.remove(p1.id)
+    this.remove(p2.id)
+
+    if (winner) this.add(winner)
+  }
+
+  get(tier: number): [Pact, Pact] | null {
+    const queue = this.queues[tier]
+    if (queue && queue.length >= 2) {
+      const [f1, f2] = queue
+      if (f1 && f2) return [f1.clone(), f2.clone()]
+    }
+    return null
+  }
+
+  getAvailableTier(): number | null {
+    const tiers = Object.keys(this.queues)
+      .map(Number)
+      .sort((a, b) => a - b)
+
+    for (const tier of tiers) {
+      if ((this.queues[tier]?.length ?? 0) >= 2) return tier
+    }
+    return null
+  }
+}

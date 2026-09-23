@@ -7,17 +7,18 @@ const { day } = defineProps<{
   day: Day
 }>()
 
-const winner = computed(() => day.winner)
-const outcome = computed(() => day.outcome)
-const rewards = computed(() => day.rewards)
+const winner = computed(() => day.battle?.winner)
+const outcome = computed(() => day.battle?.outcome)
+const rewards = computed(() => day.battle?.rewards)
 
 const MESSAGES = {
   victory: 'Victory !',
   stalemate: 'Their strength matches !',
   unfortunate: 'Everyone met an unfortunate end ...',
+  _: '???',
 } as const
 
-const resultMessage = computed(() => MESSAGES[outcome.value])
+const resultMessage = computed(() => MESSAGES[outcome.value ?? '_'])
 </script>
 
 <template>

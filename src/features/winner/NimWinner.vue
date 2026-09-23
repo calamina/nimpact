@@ -2,12 +2,12 @@
 import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Pact } from '@/entities/Pact'
 
-const { pact } = defineProps<{ pact?: Pact }>()
+const { pact, hideName } = defineProps<{ pact?: Pact; hideName?: boolean }>()
 </script>
 
 <template>
   <BlockLayout class="pact" v-if="pact">
-    <div>
+    <div v-if="!hideName">
       <p class="low">Winner</p>
       <p class="color-main">{{ pact.name }}</p>
     </div>

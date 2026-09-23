@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
-import { useNimStore } from '@/store/nims'
 import NimCard from '../card/NimCard.vue'
 import { useBattleEngine } from '@/composables/battleEngine.ts'
 import BlockLayout from '@/components/layouts/BlockLayout.vue'
@@ -10,12 +9,10 @@ const props = defineProps<{
   day: Day
 }>()
 
-const store = useNimStore()
+const { battleState, runBattle, TIMER } = useBattleEngine(props.day)
 
-const { battleState, runBattle, TIMER } = useBattleEngine(store.activeDay ?? props.day)
-
-const firstPact = computed(() => props.day.pacts[0])
-const secondPact = computed(() => props.day.pacts[1])
+const firstPact = computed(() => props.day.battle?.p1)
+const secondPact = computed(() => props.day.battle?.p2)
 
 const timer = computed(() => TIMER.value.FIGHTING / 1000 + 's')
 
@@ -25,7 +22,7 @@ onMounted(() => runBattle())
 <template>
   <div class="fight">
     <div class="screen" v-if="firstPact && secondPact">
-      <NimCard :nim="firstPact" :key="firstPact.id" />
+      <NimCard :pact="firstPact" :key="firstPact.id" />
       <BlockLayout class="window">
         <span
           class="status"
@@ -33,7 +30,7 @@ onMounted(() => runBattle())
           :style="{ '--timer': timer }"
         ></span>
       </BlockLayout>
-      <NimCard :nim="secondPact" :key="secondPact.id" />
+      <NimCard :pact="secondPact" :key="secondPact.id" />
     </div>
   </div>
 </template>

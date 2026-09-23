@@ -80,10 +80,6 @@ const getDroppedIndex = (stat: StatConfig): number => {
   align-items: center;
   gap: 1ch;
 }
-/* 
-.name {
-  width: 3ch;
-} */
 
 .total {
   color: slateblue;

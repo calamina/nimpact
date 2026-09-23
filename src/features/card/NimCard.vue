@@ -1,45 +1,45 @@
 <script setup lang="ts">
 import BlockLayout from '@/components/layouts/BlockLayout.vue'
-import type { Nimpacter } from '@/models/nim.model'
+import type { Pact } from '@/entities/Pact'
 import { computed } from 'vue'
 
-const { nim } = defineProps<{
-  nim: Nimpacter
+const { pact } = defineProps<{
+  pact: Pact
 }>()
 
-const vanquished = computed(() => nim.stats.HP.current === 0)
+const vanquished = computed(() => pact.stats.HP.current === 0)
 </script>
 
 <template>
-  <BlockLayout class="nim" :class="{ vanquished: vanquished }">
+  <BlockLayout class="pact" :class="{ vanquished: vanquished }">
     <div class="info">
-      <p class="name">{{ nim.name }}</p>
+      <p class="name">{{ pact.name }}</p>
       <p class="life">
-        <span class="color-main">{{ nim.stats.HP.current }}</span>
-        <span class="low">/{{ nim.stats.HP.total }}</span>
+        <span class="color-main">{{ pact.stats.HP.current }}</span>
+        <span class="low">/{{ pact.stats.HP.total }}</span>
       </p>
     </div>
     <div
       class="hp"
       :style="{
-        '--hp-current': (nim.stats.HP.current / nim.stats.HP.total) * 100 + '%',
+        '--hp-current': (pact.stats.HP.current / pact.stats.HP.total) * 100 + '%',
       }"
     ></div>
     <div class="info">
       <p>
         <span class="low">{{ 'ATK ' }}</span>
-        <span class="color-main">{{ nim.stats.ATK.total }}</span>
+        <span class="color-main">{{ pact.stats.ATK.total }}</span>
       </p>
       <p>
         <span class="low">{{ 'DEF ' }}</span>
-        <span class="color-main">{{ nim.stats.DEF.total }}</span>
+        <span class="color-main">{{ pact.stats.DEF.total }}</span>
       </p>
     </div>
   </BlockLayout>
 </template>
 
 <style scoped>
-.nim {
+.pact {
   width: 100%;
   display: flex;
   flex-flow: column;

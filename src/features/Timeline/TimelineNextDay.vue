@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BlockLayout from '@/components/layouts/BlockLayout.vue'
-import { useNimStore, type Day } from '@/store/nims'
+import type { Day } from '@/entities/Day'
+import { useNimStore } from '@/store/nims'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/all'
 import { computed, onMounted, ref } from 'vue'
@@ -17,12 +18,13 @@ const MESSAGES = {
   victory: 'The winner went home to rest',
   stalemate: 'They fell in love !!',
   unfortunate: 'They were brave fighters',
+  _: '???',
 } as const
 
 const store = useNimStore()
 
-const outcome = computed(() => day.outcome)
-const message = computed(() => MESSAGES[outcome.value])
+const outcome = computed(() => day.battle?.outcome)
+const message = computed(() => MESSAGES[outcome.value ?? '_'])
 
 const next = async () => {
   nexted.value = true

@@ -18,10 +18,12 @@
 
 ## Global
 
-- ask for reforge when type count > 1
-  - add interaction
-  - add special cases : 10% superb & 10% break
-  - add auto reforge/pick best
+- refactor victory
+  - promote winner to next tier
+  - ask for reforge when item type count > 1
+    - add interaction
+    - add special cases : 10% superb & 10% break
+    - add auto reforge/pick best
 - add compact card for winners ? or bottom pannel on hover/focus
 - make days appear w/ transition
 - random bonus to some nimpacters ?
