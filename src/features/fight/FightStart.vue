@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { useNimStore, type Day } from '@/store/nims'
+import BlockLayout from '@/components/layouts/BlockLayout.vue'
+import type { Day } from '@/entities/Day'
+import { useNimStore } from '@/store/nims'
 import { computed, onMounted, ref } from 'vue'
 
 const { day } = defineProps<{
@@ -11,7 +13,7 @@ const started = ref(false)
 
 function handleStart() {
   started.value = true
-  store.startFightForDay()
+  store.activeDay?.startFight()
 }
 
 const resultMessage = computed(() =>
@@ -24,13 +26,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fight">
-    <div class="lines"></div>
+  <BlockLayout class="fight">
     <div class="box">
       <button v-if="!started" @click="handleStart">Fight</button>
       <p :class="{ low: day.phase !== 2 }" v-else>{{ resultMessage }}</p>
     </div>
-  </div>
+  </BlockLayout>
 </template>
 
 <style scoped>
@@ -41,19 +42,19 @@ onMounted(() => {
   width: 100%;
 }
 
-.lines {
-  height: 2rem;
-  border-left: 1px solid #00000035;
-  border-right: 1px solid #00000035;
-  width: 24rem;
-  flex-shrink: 0;
+.box {
+  width: 100%;
+}
+
+button {
+  background-color: #6a5acd44;
 }
 
 button,
 p {
   position: relative;
   padding: 1rem;
-  width: 40rem;
+  width: 100%;
   text-align: center;
 }
 </style>

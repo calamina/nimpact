@@ -30,7 +30,7 @@ export function useTimelineTransition() {
         ease: 'power2.out',
       })
       .to(
-        window,
+        container,
         {
           scrollTo: 'max',
           duration: 0.4,

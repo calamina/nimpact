@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Day } from '@/store/nims'
+import BlockLayout from '@/components/layouts/BlockLayout.vue'
+import type { Day } from '@/entities/Day'
 
 const { day } = defineProps<{
   day: Day
@@ -20,33 +21,32 @@ const resultMessage = computed(() => MESSAGES[outcome.value])
 </script>
 
 <template>
-  <div class="result">
-    <div class="line"></div>
-    <div class="screen box">
-      <div v-if="outcome === 'victory' && winner" class="victory">
-        <p class="winner">{{ resultMessage }}</p>
-        <div class="info">
-          <p class="color-main">{{ winner.name }}</p>
+  <div class="screen">
+    <BlockLayout v-if="outcome === 'victory' && winner" class="victory">
+      <div class="winner">
+        <p>{{ resultMessage }}</p>
+      </div>
+      <div class="info">
+        <p class="color-main">{{ winner.name }}</p>
 
-          <div v-if="rewards?.item">
-            <p class="low">They stole an item</p>
-            <p>
-              {{ rewards.item.name }}
-              <span class="color-item">({{ rewards.item.value }} {{ rewards.item.type }})</span>
-            </p>
-          </div>
+        <div v-if="rewards?.item">
+          <p class="low">They stole an item</p>
+          <p>
+            {{ rewards.item.name }}
+            <span class="color-item">({{ rewards.item.value }} {{ rewards.item.type }})</span>
+          </p>
+        </div>
 
-          <div v-if="rewards?.stat">
-            <p class="low">They learned something</p>
-            <p class="color-exp">+ {{ rewards.stat.value }} {{ rewards.stat.type }}</p>
-          </div>
+        <div v-if="rewards?.stat">
+          <p class="low">They learned something</p>
+          <p class="color-exp">({{ rewards.stat.value }} {{ rewards.stat.type }})</p>
         </div>
       </div>
+    </BlockLayout>
 
-      <p v-else class="unfortunate">
-        {{ resultMessage }}
-      </p>
-    </div>
+    <BlockLayout v-else class="unfortunate">
+      {{ resultMessage }}
+    </BlockLayout>
   </div>
 </template>
 
@@ -56,18 +56,21 @@ const resultMessage = computed(() => MESSAGES[outcome.value])
   flex-flow: column;
   align-items: center;
   width: 100%;
+  /* background-color: #0000000a; */
 }
 
-.line {
+/* .line {
   flex-shrink: 0;
   height: 2rem;
   width: 1px;
-  background-color: #00000035;
-}
+  background-color: #00000050;
+  } */
 
 .screen {
+  /* background-color: #0000000a; */
   display: flex;
-  width: 19.5rem;
+  /* width: 19.5rem; */
+  width: fit-content;
   align-items: center;
   justify-content: center;
 }
@@ -76,6 +79,8 @@ const resultMessage = computed(() => MESSAGES[outcome.value])
   display: flex;
   flex-flow: column;
   width: 100%;
+  /* padding: 1rem; */
+  /* gap: 1rem; */
 }
 
 .info {
@@ -87,8 +92,8 @@ const resultMessage = computed(() => MESSAGES[outcome.value])
 
 .winner {
   text-align: center;
-  border-bottom: 1px solid #00000053;
   padding: 1rem;
+  background-color: #0000000a;
 }
 
 .unfortunate {

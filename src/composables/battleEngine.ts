@@ -1,28 +1,43 @@
 import { ref } from 'vue'
-import { useNimStore, type Day } from '@/store/nims'
-import type { Nimpacter } from '@/models/nim.model'
+import { useNimStore } from '@/store/nims'
+import type { Day } from '@/entities/Day'
 
 export function useBattleEngine(day: Day) {
   const store = useNimStore()
   const battleState = ref<'IDLE' | 'FIGHTING' | 'FINISHED'>('IDLE')
   const TIMER = ref({
-    IDLE: 300,
-    FIGHTING: 800,
+    IDLE: store.blitz ? 0 : 300,
+    FIGHTING: store.blitz ? 0 : 800,
   })
 
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
-  const applyDamage = (attacker: Nimpacter, defender: Nimpacter) => {
-    const dmg = Math.max(0, attacker.stats.ATK.total - defender.stats.DEF.total)
-    defender.stats.HP.current = Math.max(0, defender.stats.HP.current - dmg)
-  }
-
   const runBattle = async () => {
-    const [p1, p2] = day.nimpacters
+    const [p1, p2] = day.pacts
     if (!p1 || !p2) return
 
     let round = 0
-    while (p1.stats.HP.current > 0 && p2.stats.HP.current > 0) {
+
+    if (store.blitz) {
+      while (!day.isBattleFinished()) {
+        round++
+        day.executeRound()
+
+        if (
+          round === 3 &&
+          p1.stats.HP.current === p1.stats.HP.total &&
+          p2.stats.HP.current === p2.stats.HP.total
+        ) {
+          break
+        }
+      }
+
+      battleState.value = 'FINISHED'
+      store.finalizeBattle()
+      return
+    }
+
+    while (!day.isBattleFinished()) {
       round++
       battleState.value = 'IDLE'
       await sleep(TIMER.value.IDLE)
@@ -30,8 +45,7 @@ export function useBattleEngine(day: Day) {
       battleState.value = 'FIGHTING'
       await sleep(TIMER.value.FIGHTING)
 
-      applyDamage(p2, p1)
-      applyDamage(p1, p2)
+      day.executeRound()
 
       if (round % 3 === 0) {
         TIMER.value.IDLE = Math.max(50, TIMER.value.IDLE - 50)

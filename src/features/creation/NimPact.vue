@@ -34,14 +34,14 @@ onMounted(() => {
 <style scoped>
 button {
   width: 100%;
-  border-radius: 4px;
-  padding: 0.25rem 0.75rem;
+  padding: 1rem;
   height: 100%;
   display: flex;
   flex-flow: column;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  /* background-color: #6a5acd44; */
 
   &:hover .pact,
   &:focus-visible .pact {

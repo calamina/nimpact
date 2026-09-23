@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { adjectives, uniqueNamesGenerator } from 'unique-names-generator'
-import type { Item } from '@/models/nim.model'
+import { Item } from '@/entities/Item'
 
 const emit = defineEmits<{
   (e: 'item', item: Item): void
@@ -23,15 +23,16 @@ const generateItem = (): Item => {
   })
 
   if (isWeapon) {
-    return { name, type: 'ATK', value: getRandomInt(4) }
+    return new Item({ name, type: 'ATK', value: getRandomInt(4), tier: 1 })
   }
 
   const isDef = Math.random() > 0.5
-  return {
+  return new Item({
     name,
     type: isDef ? 'DEF' : 'HP',
     value: isDef ? getRandomInt(4) : getRandomInt(20),
-  }
+    tier: 1,
+  })
 }
 
 const item = ref<Item>(generateItem())
@@ -41,14 +42,29 @@ onMounted(() => emit('item', item.value))
 <template>
   <div class="item" v-if="item">
     <p class="low">They possess</p>
-    <p>
-      {{ item.name }}
-      <span class="color-item">({{ item.value }} {{ item.type }})</span>
-    </p>
+    <div class="info">
+      <p class="name">{{ item.name }}</p>
+      <span class="color-item value">({{ item.value }} {{ item.type }})</span>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.info {
+  display: flex;
+  gap: 1ch;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.value {
+  flex-shrink: 0;
+}
+
 .item {
   display: flex;
   flex-direction: column;

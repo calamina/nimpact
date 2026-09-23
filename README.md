@@ -1,18 +1,29 @@
 # Nimpact
 
+-> Queen-Pact ! you manage a kingdom where you must find a champion to deafeat ever stronger foes ??
+
+- pactless (ennemies ?)
+
+<!-- - Pacten
+- Pact-Qhand
+- Pact-Jjaar
+- Pact-Shand
+- Pact-Myrie -->
+
 ## Technical
 
 - consolidate behaviours (composables)
-- consolidates models
+- consolidates models (classes)
 - streamline naming
 
 ## Global
 
-- only show last ~ 6 days, add 'show more' for the rest
-- delete empty tiers
+- ask for reforge when type count > 1
+  - add interaction
+  - add special cases : 10% superb & 10% break
+  - add auto reforge/pick best
 - add compact card for winners ? or bottom pannel on hover/focus
 - make days appear w/ transition
-- add tier name instead of enum in winners
 - random bonus to some nimpacters ?
 
 ## Victory
@@ -20,8 +31,7 @@
 - stalemate : couple / fusion : bless next fighter ?
 - add events when Tiered champions die / kill each other
 - both die : fuse items and add to next day's pool
-  - change item stats to array
-  - add "*" matching array length for quality
+- add "*" matching array length for quality
 - random loser becomes ghost fighter
 
 ## Fight screen

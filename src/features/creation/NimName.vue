@@ -19,5 +19,8 @@ div {
 
 .name {
   color: slateblue;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

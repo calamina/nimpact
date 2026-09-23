@@ -1,3 +1,5 @@
+import type { Item } from '@/entities/Item'
+
 export interface NimStat {
   type: Stat
   total: number
@@ -16,25 +18,11 @@ export interface NimStatBonus {
   value: number
 }
 
-export interface Item {
-  name: string
-  type: Stat
-  value: number
-}
-
 export interface Nim {
   id: string
   name: string
   stats: NimStat[]
   items: Item[]
-}
-
-export interface Nimpacter {
-  id: string
-  name: string
-  items: Item[]
-  stats: Record<Stat, NimStatFight>
-  wins: number
 }
 
 export type Stat = 'HP' | 'ATK' | 'DEF'
@@ -45,3 +33,16 @@ export enum GameState {
   FIGHTING = 2,
   RESULT = 3,
 }
+
+export const TIERS = {
+  1: 'Pacten',
+  2: 'Qhand',
+  3: 'Jjaar',
+  4: 'Shand',
+  5: 'Strahl',
+  6: 'Abstrahl',
+  7: 'Myrie',
+  8: 'Anda-Myrie',
+} as const
+
+export type TierKey = keyof typeof TIERS

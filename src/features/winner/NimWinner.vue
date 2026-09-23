@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import type { Nimpacter } from '@/models/nim.model'
+import BlockLayout from '@/components/layouts/BlockLayout.vue'
+import type { Pact } from '@/entities/Pact'
 
-const { nim } = defineProps<{ nim?: Nimpacter }>()
+const { pact } = defineProps<{ pact?: Pact }>()
 </script>
 
 <template>
-  <div class="nim box" v-if="nim">
+  <BlockLayout class="pact" v-if="pact">
     <div>
       <p class="low">Winner</p>
-      <p class="color-main">{{ nim.name }}</p>
+      <p class="color-main">{{ pact.name }}</p>
     </div>
     <div>
       <p class="low">Stats</p>
-      <p v-for="stat in nim.stats">
+      <p v-for="stat in pact.stats">
         <span class="stat">{{ stat.type }}</span>
         <span class="statvalue color-main">{{ stat.total }}</span>
         <span class="low"> [ {{ stat.base }}</span>
@@ -23,22 +24,23 @@ const { nim } = defineProps<{ nim?: Nimpacter }>()
     </div>
     <div>
       <p class="low">Items</p>
-      <p v-for="item in nim.items">
+      <p v-for="item in pact.items">
         {{ item.name }}
+        <template v-if="item.tier > 1">T{{ item.tier }}&nbsp;</template>
         <span class="color-item">({{ item.value }} {{ item.type }})</span>
       </p>
     </div>
     <div>
       <p class="low">Fight experience</p>
-      <template v-for="stat in nim.stats">
+      <template v-for="stat in pact.stats">
         <p v-if="stat.experience" class="color-exp">{{ stat.experience }} {{ stat.type }}</p>
       </template>
     </div>
-  </div>
+  </BlockLayout>
 </template>
 
 <style scoped>
-.nim {
+.pact {
   width: 100%;
   display: flex;
   flex-flow: column;

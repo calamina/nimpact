@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Nimpacter } from '@/models/nim.model'
 import { computed } from 'vue'
 
@@ -10,10 +11,10 @@ const vanquished = computed(() => nim.stats.HP.current === 0)
 </script>
 
 <template>
-  <div class="nim" :class="{ vanquished: vanquished }">
+  <BlockLayout class="nim" :class="{ vanquished: vanquished }">
     <div class="info">
       <p class="name">{{ nim.name }}</p>
-      <p>
+      <p class="life">
         <span class="color-main">{{ nim.stats.HP.current }}</span>
         <span class="low">/{{ nim.stats.HP.total }}</span>
       </p>
@@ -34,7 +35,7 @@ const vanquished = computed(() => nim.stats.HP.current === 0)
         <span class="color-main">{{ nim.stats.DEF.total }}</span>
       </p>
     </div>
-  </div>
+  </BlockLayout>
 </template>
 
 <style scoped>
@@ -53,12 +54,22 @@ const vanquished = computed(() => nim.stats.HP.current === 0)
   gap: 2ch;
 }
 
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.life {
+  flex-shrink: 0;
+}
+
 .hp {
   height: 8px;
   border-radius: 4px;
   position: relative;
   overflow: clip;
-  background-color: #00000035;
+  background-color: #00000018;
 
   &:after {
     content: '';

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
-import { useNimStore, type Day } from '@/store/nims'
+import { useNimStore } from '@/store/nims'
 import NimCard from '../card/NimCard.vue'
 import { useBattleEngine } from '@/composables/battleEngine.ts'
+import BlockLayout from '@/components/layouts/BlockLayout.vue'
+import type { Day } from '@/entities/Day.ts'
 
 const props = defineProps<{
   day: Day
@@ -10,10 +12,10 @@ const props = defineProps<{
 
 const store = useNimStore()
 
-const { battleState, runBattle, TIMER } = useBattleEngine(store.currentDay ?? props.day)
+const { battleState, runBattle, TIMER } = useBattleEngine(store.activeDay ?? props.day)
 
-const nimpacter1 = computed(() => props.day.nimpacters[0])
-const nimpacter2 = computed(() => props.day.nimpacters[1])
+const firstPact = computed(() => props.day.pacts[0])
+const secondPact = computed(() => props.day.pacts[1])
 
 const timer = computed(() => TIMER.value.FIGHTING / 1000 + 's')
 
@@ -22,17 +24,16 @@ onMounted(() => runBattle())
 
 <template>
   <div class="fight">
-    <div class="line"></div>
-    <div class="screen box" v-if="nimpacter1 && nimpacter2">
-      <NimCard :nim="nimpacter1" :key="nimpacter1.id" />
-      <div class="window">
+    <div class="screen" v-if="firstPact && secondPact">
+      <NimCard :nim="firstPact" :key="firstPact.id" />
+      <BlockLayout class="window">
         <span
           class="status"
           :class="{ fighting: battleState === 'FIGHTING', finished: battleState === 'FINISHED' }"
           :style="{ '--timer': timer }"
         ></span>
-      </div>
-      <NimCard :nim="nimpacter2" :key="nimpacter2.id" />
+      </BlockLayout>
+      <NimCard :nim="secondPact" :key="secondPact.id" />
     </div>
   </div>
 </template>
@@ -45,19 +46,12 @@ onMounted(() => runBattle())
   width: 100%;
 }
 
-.line {
-  flex-shrink: 0;
-  height: 2rem;
-  width: 1px;
-  background-color: #00000035;
-}
-
 .screen {
   display: grid;
   align-items: center;
   justify-content: center;
   grid-template-columns: 1fr 5rem 1fr;
-  width: 44rem;
+  width: 100%;
 }
 
 .window {
@@ -68,8 +62,7 @@ onMounted(() => runBattle())
   flex-shrink: 0;
   padding: 1rem;
   width: 100%;
-  border-left: 1px solid #00000035;
-  border-right: 1px solid #00000035;
+  background-color: #00000014;
 }
 
 .status {
@@ -83,7 +76,7 @@ onMounted(() => runBattle())
     animation: fighting var(--timer) cubic-bezier(0.6, 0, 0.6, 1) infinite;
   }
   &.finished {
-    background-color: #00000035;
+    background-color: #00000050;
   }
 }
 

@@ -2,23 +2,14 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useNimStore } from './store/nims'
 import TimelineView from './features/Timeline/TimelineView.vue'
-import type { Nimpacter } from './models/nim.model.ts'
+import { TIERS, type TierKey } from './models/nim.model.ts'
 import NimWinner from './features/winner/NimWinner.vue'
+import gsap from 'gsap'
+import type { Pact } from './entities/Pact.ts'
 
 const store = useNimStore()
 
 onMounted(() => store.init())
-
-const TIERS = {
-  1: 'Winners',
-  2: 'Champions',
-  3: 'Heroes',
-  4: 'Legends',
-  5: 'Demi-gods',
-  6: '???',
-} as const
-
-type TierKey = keyof typeof TIERS
 
 const sortedTiers = computed(() => {
   return Object.keys(store.winnerQueue)
@@ -29,48 +20,60 @@ const sortedTiers = computed(() => {
 
 const hasWinners = computed(() => sortedTiers.value.length > 0)
 
-const selectedNim = ref<Nimpacter | null>(null)
-const setSelectedNim = (nim: Nimpacter) =>
-  (selectedNim.value = selectedNim.value === nim ? null : nim)
+const selectedNim = ref<Pact | null>(null)
+const setSelectedNim = (nim: Pact) => (selectedNim.value = selectedNim.value === nim ? null : nim)
 
 watch(store.winnerQueue, () => {
-  let found: null | Nimpacter = null
+  let found: null | Pact = null
   for (const tier in store.winnerQueue) {
     const got = store.winnerQueue[tier]?.find((nim) => nim.id === selectedNim.value?.id)
     if (got) found = got
   }
   if (!found) selectedNim.value = null
 })
+
+watch(
+  () => store.activeDay,
+  (newDay) => {
+    if (!newDay) return
+    const container = document.querySelector('.days') as HTMLElement
+    gsap.to(container, {
+      scrollTo: 'max',
+      duration: 0.4,
+      delay: 0.1,
+      ease: 'sine.out',
+    })
+  },
+)
 </script>
 
 <template>
   <main>
     <section class="left">
       <div class="autofight">
-        <button
-          class="autobutton box"
-          :class="{ low: !store.autofight }"
-          @click="store.setAutofight"
-        >
+        <button class="autobutton" :class="{ low: !store.autofight }" @click="store.setAutofight">
           autofight <span v-if="store.autofight" class="autoanim"></span>
+        </button>
+        <button class="autobutton" :class="{ low: !store.blitz }" @click="store.setBlitz">
+          blitz <span v-if="store.blitz" class="autoanim"></span>
         </button>
       </div>
       <div class="days">
-        <div
+        <a
           v-for="day in store.days"
           class="day"
-          :class="{ 'color-main': day?.tier, low: day?.id !== store.currentDay?.id }"
+          :href="'#day' + day?.id"
+          :class="{ 'day-high': day?.tier, 'day-low': day?.id !== store.activeDay?.id }"
         >
-          <a :href="'#day' + day?.id"> Day {{ day?.id }} </a>
-          <p><span v-for="_ in day?.tier">*</span></p>
-        </div>
+          Day {{ day?.id }} <span class="star" v-for="_ in day?.tier">✦</span>
+        </a>
       </div>
     </section>
 
     <TimelineView />
 
     <section class="right">
-      <div class="winners box" v-if="hasWinners">
+      <div class="winners" v-if="hasWinners">
         <div v-for="tier in sortedTiers" :key="tier" class="tier">
           <p class="low">{{ TIERS[tier] }} ({{ tier }} wins)</p>
           <button v-for="nim in store.winnerQueue[tier]" :key="nim.id" @click="setSelectedNim(nim)">
@@ -86,30 +89,30 @@ watch(store.winnerQueue, () => {
 <style scoped>
 main {
   display: grid;
-  grid-template-columns: 20vw 60vw 20vw;
+  grid-template-columns: 20% 60% 20%;
+  height: 100svh;
+  width: 100vw;
 }
 
 .left,
 .right {
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
   overflow-y: auto;
   padding: 1rem;
+  display: flex;
+  flex-flow: column;
+  gap: 1rem;
+  background-color: #ffffff55;
+  scrollbar-color: #00000020 transparent;
 }
 
 .left {
-  display: flex;
-  flex-flow: column;
   align-items: flex-start;
-  gap: 1rem;
-  width: fit-content;
 }
 .right {
-  display: flex;
-  flex-flow: column;
-  gap: 1rem;
-  justify-content: center;
   align-items: center;
 }
 
@@ -119,6 +122,8 @@ main {
   height: fit-content;
   padding: 1rem;
   gap: 1rem;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 .tier-group {
@@ -137,10 +142,19 @@ main {
   }
 }
 
+.autofight {
+  display: flex;
+  flex-flow: column;
+  gap: 1ch;
+}
+
 .autobutton {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 0.25rem 1rem;
+  background-color: #0000000a;
+  opacity: 1;
   gap: 1rem;
   &:hover,
   &:focus-within {
@@ -170,7 +184,6 @@ main {
   display: flex;
   flex-flow: column;
   gap: 0.25rem;
-  padding: 1rem;
   overflow: scroll;
   overscroll-behavior: contain;
   width: 100%;
@@ -179,15 +192,28 @@ main {
 .day {
   display: flex;
   gap: 1ch;
+  text-decoration: none;
+  text-underline-offset: 4px;
 
-  a {
-    text-decoration-color: #00000035;
+  &.day-low {
+    color: #00000060;
   }
 
-  /* opacity: 0.35; */
+  &.day-high {
+    color: slateblue;
+  }
+
   &:hover,
-  &:focus-within {
-    opacity: 1;
+  &:focus-within,
+  &:last-child {
+    &::before {
+      content: '→';
+    }
   }
+}
+
+.star {
+  display: inline-block;
+  width: 0ch;
 }
 </style>

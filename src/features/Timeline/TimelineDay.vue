@@ -1,63 +1,58 @@
 <script setup lang="ts">
-import { type Day } from '@/store/nims'
+import BlockLayout from '@/components/layouts/BlockLayout.vue'
+import type { Day } from '@/entities/Day'
+import { TIERS, type TierKey } from '@/models/nim.model'
+import gsap from 'gsap'
+import { onMounted } from 'vue'
 const { day } = defineProps<{ day: Day }>()
 
-const TIERS = {
-  1: 'Winners',
-  2: 'Champions',
-  3: 'Heroes',
-  4: 'Legends',
-  5: 'Demi-gods',
-  6: '???',
-} as const
+onMounted(() => {
+  const container = document.querySelector('.timeline-view') as HTMLElement
 
-type TierKey = keyof typeof TIERS
+  if (container) {
+    gsap.to(container, {
+      paddingBottom: `${window.innerHeight * 0.4}px`,
+      duration: 0.2,
+      ease: 'power2.out',
+    })
+  }
+
+  gsap.to(container, {
+    scrollTo: 'max',
+    duration: 0.4,
+    delay: 0.1,
+    ease: 'sine.out',
+  })
+})
 </script>
 
 <template>
-  <div class="wrap">
-    <h2 :id="'day' + day.id" class="day box" :class="{ 'box-color-main': day.tier }">
-      Day {{ day.id }}
-      <span v-if="day.tier" class="color-main">{{ TIERS[day.tier as TierKey] }}'s fight !</span>
+  <BlockLayout class="block">
+    <h2 class="day" :id="'day' + day.id">
+      <span class="title">Day {{ day.id }}</span>
+      <span v-if="day.tier" class="color-main">✦ {{ TIERS[day.tier as TierKey] }} fight ✦</span>
     </h2>
-    <div class="line"></div>
-    <div class="lines"></div>
-  </div>
+  </BlockLayout>
 </template>
 
 <style scoped>
-.wrap {
-  display: grid;
-  width: 24rem;
-  grid-template-rows: auto 2rem 2rem;
-  place-items: center;
-  margin-top: 6rem;
+.block {
+  padding: 1rem;
 }
 
-.day {
-  padding: 1rem;
+h2 {
   display: flex;
   flex-flow: column;
   align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  min-width: 8rem;
+  gap: 1ch;
   scroll-margin-top: 2rem;
 }
 
-.line {
-  height: 100%;
-  width: 1px;
-  background-color: #00000035;
-}
-
-.lines {
-  height: 100%;
-  width: 100%;
-  border: 1px solid #00000035;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  border-bottom: none;
-}
-
-.line-high {
-  border-color: slateblue;
+.title {
+  font-size: 2rem;
+  line-height: 2rem;
 }
 </style>

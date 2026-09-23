@@ -5,15 +5,17 @@ import NimPact from './NimPact.vue'
 import NimName from './NimName.vue'
 import NimItem from './NimItem.vue'
 import { computed, ref } from 'vue'
-import type { Item, Nim, NimStat } from '@/models/nim.model.ts'
+import type { Nim, NimStat } from '@/models/nim.model.ts'
 import type { CreateState } from '@/models/create.model.ts'
 import { useCreateTransition } from '@/composables/createTransitions.ts'
+import BlockLayout from '@/components/layouts/BlockLayout.vue'
+import type { Item } from '@/entities/Item.ts'
 
 const { id } = defineProps<{
   id: number
 }>()
 
-const { addNimToDay } = useNimStore()
+const store = useNimStore()
 const { onPhaseBeforeEnter, onPhaseEnter, onPhaseLeave, onStepBeforeEnter, onStepEnter } =
   useCreateTransition()
 
@@ -22,33 +24,36 @@ const draftNim = ref<Partial<Nim>>({})
 
 const isIdDone = computed(() => ['STATS', 'ITEM', 'DONE'].includes(createState.value))
 const isStatsDone = computed(() => ['ITEM', 'DONE'].includes(createState.value))
+const time = computed(() =>
+  store.blitz ? { id: 0, stats: 0, item: 0 } : { id: 700, stats: 250, item: 500 },
+)
 
 const onIdentityCreated = async (id: string, name: string) => {
   draftNim.value = { id, name }
   createState.value = 'ID'
 
-  await new Promise((resolve) => setTimeout(resolve, 700))
+  await new Promise((resolve) => setTimeout(resolve, time.value.id))
   createState.value = 'STATS'
 }
 
 const onStatsCreated = async (stats: NimStat[]) => {
   draftNim.value.stats = stats
 
-  await new Promise((resolve) => setTimeout(resolve, 250))
+  await new Promise((resolve) => setTimeout(resolve, time.value.stats))
   createState.value = 'ITEM'
 }
 
 const onItemCreated = async (item: Item) => {
   draftNim.value.items = [item]
   createState.value = 'DONE'
-  await new Promise((resolve) => setTimeout(resolve, 500))
+  await new Promise((resolve) => setTimeout(resolve, time.value.item))
 
-  addNimToDay(draftNim.value as Nim, id)
+  store.activeDay?.addNim(draftNim.value as Nim, id)
 }
 </script>
 
 <template>
-  <div class="create box">
+  <BlockLayout class="create" v-bind="$attrs">
     <Transition
       :css="false"
       mode="out-in"
@@ -70,7 +75,7 @@ const onItemCreated = async (item: Item) => {
         </Transition>
       </div>
     </Transition>
-  </div>
+  </BlockLayout>
 </template>
 
 <style scoped>

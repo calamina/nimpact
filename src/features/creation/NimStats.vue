@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useDiceRoller } from '@/composables/diceRoller'
 import type { StatConfig } from '@/models/create.model'
 import type { NimStat } from '@/models/nim.model'
+import { useNimStore } from '@/store/nims'
 
 const emit = defineEmits<{
   (e: 'stats', stats: NimStat[]): void
 }>()
 const { stats, rollAllStats } = useDiceRoller()
 
+const store = useNimStore()
+const time = computed(() => (store.blitz ? 0 : 400))
+
 onMounted(async () => {
-  await new Promise((r) => setTimeout(r, 400))
+  await new Promise((r) => setTimeout(r, time.value))
   const result = await rollAllStats()
   emit('stats', result)
 })
@@ -35,7 +39,7 @@ const getDroppedIndex = (stat: StatConfig): number => {
           <div
             v-for="i in stat.dices"
             :key="i"
-            class="dice box"
+            class="dice"
             :style="{
               '--d-sides': stat.d,
               '--speed': `${stat.d / 20}s`,
@@ -73,8 +77,13 @@ const getDroppedIndex = (stat: StatConfig): number => {
 
 .stat-header {
   display: flex;
+  align-items: center;
   gap: 1ch;
 }
+/* 
+.name {
+  width: 3ch;
+} */
 
 .total {
   color: slateblue;
@@ -91,6 +100,9 @@ const getDroppedIndex = (stat: StatConfig): number => {
   overflow: hidden;
   display: grid;
   place-items: center;
+  border: 1px solid #00000035;
+  background-color: #0000000a;
+  border-radius: 4px;
 }
 
 .face {
