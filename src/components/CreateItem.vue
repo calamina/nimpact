@@ -2,6 +2,8 @@
 import { onMounted, ref } from 'vue'
 import { adjectives, uniqueNamesGenerator } from 'unique-names-generator'
 import { Item } from '@/entities/Item'
+import { getRandomInt } from '@/utils/utils'
+import type { StatType } from '@/entities/Stat'
 
 const emit = defineEmits<{
   (e: 'item', item: Item): void
@@ -10,27 +12,43 @@ const emit = defineEmits<{
 const WEAPONS = ['sword', 'bow', 'dagger', 'axe', 'mace', 'knife', 'spear']
 const ARMORS = ['mail', 'helm', 'shield', 'cuirass', 'brigandine', 'breastplate', 'buckler']
 
-const getRandomInt = (max: number) => Math.floor(Math.random() * max) + 1
+interface LootEntry {
+  type: StatType
+  weight: number
+  dictionary: string[]
+  maxVal: number
+}
+
+const LOOT_TABLE: LootEntry[] = [
+  { type: 'ATK', weight: 30, dictionary: WEAPONS, maxVal: 4 },
+  { type: 'HP', weight: 30, dictionary: ARMORS, maxVal: 20 },
+  { type: 'DEF', weight: 40, dictionary: ARMORS, maxVal: 4 },
+]
 
 const generateItem = (): Item => {
-  const isWeapon = Math.random() > 0.5
-  const dictionary = isWeapon ? WEAPONS : ARMORS
+  let randomWeight = Math.random() * 100
+
+  let selectedEntry = LOOT_TABLE[0] as LootEntry
+  for (const entry of LOOT_TABLE) {
+    if (randomWeight < entry.weight) {
+      selectedEntry = entry
+      break
+    }
+    randomWeight -= entry.weight
+  }
 
   const name = uniqueNamesGenerator({
-    dictionaries: [adjectives, dictionary],
+    dictionaries: [adjectives, selectedEntry.dictionary],
     separator: ' ',
     style: 'capital',
   })
 
-  if (isWeapon) {
-    return new Item({ name, type: 'ATK', value: getRandomInt(4), tier: 1 })
-  }
+  const value = getRandomInt(selectedEntry.maxVal)
 
-  const isDef = Math.random() > 0.5
   return new Item({
     name,
-    type: isDef ? 'DEF' : 'HP',
-    value: isDef ? getRandomInt(4) : getRandomInt(20),
+    type: selectedEntry.type,
+    value,
     tier: 1,
   })
 }

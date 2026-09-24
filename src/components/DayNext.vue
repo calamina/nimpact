@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import BlockLayout from '@/components/layouts/BlockLayout.vue'
-import type { Day } from '@/entities/Day'
-import { useStore } from '@/store/store'
-import gsap from 'gsap'
-import { ScrollToPlugin } from 'gsap/all'
+import { useStore } from '@/composables/useStore'
 import { computed, onMounted, ref } from 'vue'
-
-gsap.registerPlugin(ScrollToPlugin)
+import type { Day } from '@/entities/Day'
 
 const { day } = defineProps<{
   day: Day
@@ -33,12 +28,6 @@ const next = async () => {
   // Slows down the beast
   // if (store.blitz) await new Promise((r) => setTimeout(r, 300))
   store.startNewDay()
-  gsap.to(window, {
-    scrollTo: 'max',
-    duration: 0.4,
-    delay: 0.1,
-    ease: 'sine.out',
-  })
 }
 
 onMounted(() => {
@@ -47,13 +36,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <BlockLayout class="next">
+  <LayoutBlock class="next">
     <button v-if="!nexted" @click="next()">Start the next day</button>
     <div class="finished" v-else>
       <p class="ended">The day has ended ...</p>
       <p>{{ message }}</p>
     </div>
-  </BlockLayout>
+  </LayoutBlock>
 </template>
 
 <style scoped>

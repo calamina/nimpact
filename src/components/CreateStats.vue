@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { useDiceRoller } from '@/composables/diceRoller'
-import { useStore } from '@/store/store'
+import { useStatRoll } from '@/composables/useStatRoll'
+import { useStore } from '@/composables/useStore'
 import type { Stat } from '@/entities/Stat'
 import type { Stats } from '@/entities/Stats'
 
 const emit = defineEmits<{
   (e: 'stats', stats: Stats): void
 }>()
-const { stats, rollAllStats } = useDiceRoller()
+const { stats, rollAllStats } = useStatRoll()
 
 const store = useStore()
 const time = computed(() => (store.blitz ? 0 : 400))

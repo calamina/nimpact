@@ -1,4 +1,6 @@
-import { Pact } from './Pact'
+import type { Battle } from '@/entities/Battle'
+import { Winner } from './Winner'
+import { Pact } from '@/entities/Pact'
 
 export class BattleQueue {
   queues: Record<number, Pact[]> = {}
@@ -15,14 +17,17 @@ export class BattleQueue {
     }
   }
 
-  update(winner: Pact | null, pacts: Pact[]): void {
-    const [p1, p2] = pacts
+  update(battle: Battle): void {
+    const { winner, p1, p2, rewards } = battle
     if (!p1 || !p2) return
 
     this.remove(p1.id)
     this.remove(p2.id)
 
-    if (winner) this.add(winner)
+    if (winner) {
+      const nextFighter = new Winner(winner, rewards)
+      this.add(nextFighter)
+    }
   }
 
   get(tier: number): [Pact, Pact] | null {

@@ -1,9 +1,9 @@
 import { ref } from 'vue'
-import { useStore } from '@/store/store'
+import { useStore } from '@/composables/useStore'
 import type { Day } from '@/entities/Day'
 import { sleep } from '@/utils/utils'
 
-export function useBattleEngine(day: Day) {
+export function useBattle(day: Day) {
   const store = useStore()
   const battleState = ref<'IDLE' | 'FIGHTING' | 'FINISHED'>('IDLE')
 
@@ -41,8 +41,8 @@ export function useBattleEngine(day: Day) {
       }
     }
 
-    await sleep(TIMER.value.IDLE)
     battleState.value = 'FINISHED'
+    await sleep(TIMER.value.IDLE)
     store.finalizeDay(day.battle)
   }
 

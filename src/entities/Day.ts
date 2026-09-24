@@ -18,7 +18,6 @@ export type DayType = (typeof DayType)[keyof typeof DayType]
 
 export class Day {
   id: number
-  nims: Pact[]
   pacts: Pact[]
   phase: DayPhase
   type: DayType
@@ -27,34 +26,23 @@ export class Day {
 
   constructor(id: number, tier: number | null, activeFighters: Pact[] = []) {
     this.id = id
-    this.nims = []
     this.pacts = activeFighters
     this.phase = activeFighters.length > 0 ? DayPhase.READY : DayPhase.CREATING
     this.type = activeFighters.length > 0 ? DayType.WINNERSHIP : DayType.CLASSIC
     this.tier = tier
   }
 
-  addNim(nim: Pact, id: number): void {
-    this.nims[id - 1] = nim
-    if (this.nims.filter(Boolean).length === 2) {
+  addPact(pact: Pact, id: number): void {
+    this.pacts[id - 1] = new Pact(pact)
+    if (this.pacts.length === 2) {
       this.phase = DayPhase.READY
     }
   }
 
   startBattle(): void {
-    if (this.pacts.length !== 2) {
-      if (this.nims.length < 2) return
-      this.pacts = this.nims.map((nim) => new Pact(nim))
-    }
-
     const [p1, p2] = this.pacts
     if (p1 && p2) this.battle = new Battle(p1, p2)
-
     this.phase = DayPhase.FIGHTING
-  }
-
-  isBattleFinished(): boolean {
-    return this.battle ? this.battle.isFinished() : true
   }
 
   finish(): void {

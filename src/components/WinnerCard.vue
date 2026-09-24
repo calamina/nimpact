@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Pact } from '@/entities/Pact'
 
 const { pact, hideName } = defineProps<{ pact?: Pact; hideName?: boolean }>()
 </script>
 
 <template>
-  <BlockLayout class="pact" v-if="pact">
+  <LayoutBlock class="pact" v-if="pact">
     <div v-if="!hideName">
       <p class="low">Winner</p>
       <p class="color-main">{{ pact.name }}</p>
@@ -36,7 +35,7 @@ const { pact, hideName } = defineProps<{ pact?: Pact; hideName?: boolean }>()
         <p v-if="stat.experience" class="color-exp">{{ stat.experience }} {{ stat.type }}</p>
       </template>
     </div>
-  </BlockLayout>
+  </LayoutBlock>
 </template>
 
 <style scoped>

@@ -1,4 +1,3 @@
-// composables/createTransitions.ts
 import gsap from 'gsap'
 import { nextTick } from 'vue'
 

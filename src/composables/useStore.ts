@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { computed, ref, markRaw, shallowRef } from 'vue'
-import { Pact } from '@/entities/Pact'
 import { Day } from '@/entities/Day'
-import { Battle } from '@/entities/Battle'
 import { BattleQueue } from '@/entities/BattleQueue'
+import type { Battle } from '@/entities/Battle'
+import type { Pact } from '@/entities/Pact'
 
 export const useStore = defineStore('nim', () => {
   const completedDays = shallowRef<Day[]>([])
@@ -35,8 +35,7 @@ export const useStore = defineStore('nim', () => {
   const finalizeDay = async (battle: Battle) => {
     if (!activeDay.value) return
     activeDay.value.finish()
-
-    queue.value.update(battle.winner, activeDay.value.pacts)
+    queue.value.update(battle)
     completedDays.value.push(markRaw(activeDay.value))
     activeDay.value = null
   }

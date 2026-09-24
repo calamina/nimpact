@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Pact } from '@/entities/Pact'
 import { computed } from 'vue'
 
@@ -11,7 +10,7 @@ const vanquished = computed(() => pact.stats.HP.current === 0)
 </script>
 
 <template>
-  <BlockLayout class="pact" :class="{ vanquished: vanquished }">
+  <LayoutBlock class="pact" :class="{ vanquished: vanquished }">
     <div class="info">
       <p class="name">{{ pact.name }}</p>
       <p class="life">
@@ -35,7 +34,7 @@ const vanquished = computed(() => pact.stats.HP.current === 0)
         <span class="color-main">{{ pact.stats.DEF.total }}</span>
       </p>
     </div>
-  </BlockLayout>
+  </LayoutBlock>
 </template>
 
 <style scoped>

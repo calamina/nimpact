@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useStore } from './store/store.ts'
-import TimelineView from './features/Timeline/TimelineView.vue'
-import SidebarLayout from './components/layouts/SidebarLayout.vue'
-import ModeButtons from './components/ModeButtons.vue'
-import DayList from './components/DayList.vue'
-import WinnerList from './components/WinnerList.vue'
+import { useStore } from './composables/useStore.ts'
 
 const store = useStore()
 onMounted(() => store.startNewDay())
@@ -13,16 +8,16 @@ onMounted(() => store.startNewDay())
 
 <template>
   <main>
-    <SidebarLayout>
+    <LayoutSidebar>
       <ModeButtons />
-      <DayList />
-    </SidebarLayout>
+      <DayIndex />
+    </LayoutSidebar>
 
-    <TimelineView />
+    <DayList />
 
-    <SidebarLayout>
+    <LayoutSidebar>
       <WinnerList />
-    </SidebarLayout>
+    </LayoutSidebar>
   </main>
 </template>
 

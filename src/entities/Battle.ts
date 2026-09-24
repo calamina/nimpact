@@ -1,7 +1,7 @@
-import { Pact } from './Pact'
-import { Item } from './Item'
+import type { Item } from '@/entities/Item'
+import type { StatType } from '@/entities/Stat'
 import { FIGHT, LEVELUP } from '@/utils/constants'
-import type { StatType } from './Stat'
+import { Pact } from './Pact'
 
 export type BattleOutcome = 'victory' | 'stalemate' | 'unfortunate'
 
@@ -75,15 +75,8 @@ export class Battle {
       value: selectedType === 'HP' ? LEVELUP.HP_VALUE : LEVELUP.DEFAULT_VALUE,
     }
 
-    this.winner.stats[statBonus.type].experience += statBonus.value
-
-    let rewardedItem: Item | null = null
-    if (stolenItem) rewardedItem = this.winner.receiveItem(stolenItem)
-
-    this.winner.recalculate()
-
     this.rewards = {
-      item: rewardedItem ? rewardedItem : null,
+      item: stolenItem,
       stat: statBonus,
     }
   }

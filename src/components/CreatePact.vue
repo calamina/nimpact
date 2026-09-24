@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useStore } from '@/store/store'
+import { useStore } from '@/composables/useStore'
 import { adjectives, names, uniqueNamesGenerator } from 'unique-names-generator'
 import { onMounted } from 'vue'
 

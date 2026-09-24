@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import { useStore } from '@/store/store.ts'
-import NimStats from './NimStats.vue'
-import NimPact from './NimPact.vue'
-import NimName from './NimName.vue'
-import NimItem from './NimItem.vue'
 import { computed, ref } from 'vue'
+import { useStore } from '@/composables/useStore'
+import { useCreateTransition } from '@/composables/useCreate.ts'
+import { sleep } from '@/utils/utils'
 import type { Stats } from '@/entities/Stats.ts'
-import { useCreateTransition } from '@/composables/createTransitions.ts'
-import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Item } from '@/entities/Item.ts'
-import { sleep } from '@/utils/utils.ts'
 import type { Pact } from '@/entities/Pact.ts'
 
 type CreateState = 'IDLE' | 'ID' | 'STATS' | 'ITEM' | 'DONE'
@@ -23,7 +18,7 @@ const { onPhaseBeforeEnter, onPhaseEnter, onPhaseLeave, onStepBeforeEnter, onSte
   useCreateTransition()
 
 const createState = ref<CreateState>('IDLE')
-const draftNim = ref<Partial<Pact>>({})
+const draftPact = ref<Partial<Pact>>({})
 
 const isIdDone = computed(() => ['STATS', 'ITEM', 'DONE'].includes(createState.value))
 const isStatsDone = computed(() => ['ITEM', 'DONE'].includes(createState.value))
@@ -32,7 +27,7 @@ const time = computed(() =>
 )
 
 const onIdentityCreated = async (id: string, name: string) => {
-  draftNim.value = { id, name }
+  draftPact.value = { id, name }
   createState.value = 'ID'
 
   await sleep(time.value.id)
@@ -40,23 +35,23 @@ const onIdentityCreated = async (id: string, name: string) => {
 }
 
 const onStatsCreated = async (stats: Stats) => {
-  draftNim.value.stats = stats
+  draftPact.value.stats = stats
 
   await sleep(time.value.stats)
   createState.value = 'ITEM'
 }
 
 const onItemCreated = async (item: Item) => {
-  draftNim.value.items = [item]
+  draftPact.value.items = [item]
   createState.value = 'DONE'
   await sleep(time.value.item)
 
-  store.activeDay?.addNim(draftNim.value as Pact, id)
+  store.activeDay?.addPact(draftPact.value as Pact, id)
 }
 </script>
 
 <template>
-  <BlockLayout class="create" v-bind="$attrs">
+  <LayoutBlock class="create" v-bind="$attrs">
     <Transition
       :css="false"
       mode="out-in"
@@ -64,21 +59,21 @@ const onItemCreated = async (item: Item) => {
       @before-enter="onPhaseBeforeEnter"
       @enter="onPhaseEnter"
     >
-      <NimPact v-if="createState === 'IDLE'" @id="onIdentityCreated" />
+      <CreatePact v-if="createState === 'IDLE'" @id="onIdentityCreated" />
 
-      <div v-else-if="draftNim.name" class="nim">
-        <NimName :name="draftNim.name" />
+      <div v-else-if="draftPact.name" class="nim">
+        <CreateName :name="draftPact.name" />
 
         <Transition :css="false" @before-enter="onStepBeforeEnter" @enter="onStepEnter">
-          <NimStats v-if="isIdDone" @stats="onStatsCreated" />
+          <CreateStats v-if="isIdDone" @stats="onStatsCreated" />
         </Transition>
 
         <Transition :css="false" @before-enter="onStepBeforeEnter" @enter="onStepEnter">
-          <NimItem v-if="isStatsDone" @item="onItemCreated" />
+          <CreateItem v-if="isStatsDone" @item="onItemCreated" />
         </Transition>
       </div>
     </Transition>
-  </BlockLayout>
+  </LayoutBlock>
 </template>
 
 <style scoped>

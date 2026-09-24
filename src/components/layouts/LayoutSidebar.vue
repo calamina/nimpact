@@ -6,9 +6,7 @@
 
 <style scoped>
 section {
-  position: sticky;
-  top: 0;
-  height: 100%;
+  height: 100svh;
   width: 100%;
   overflow-y: auto;
   display: flex;

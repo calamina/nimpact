@@ -1,7 +1,7 @@
-import { Item } from './Item'
+import { Item } from '@/entities/Item'
+import { Stats } from '@/entities/Stats'
 import { FIGHT } from '@/utils/constants'
-import { Stats } from './Stats'
-import type { StatType } from './Stat'
+import type { StatType } from '@/entities/Stat'
 
 export class Pact {
   id: string
@@ -13,13 +13,14 @@ export class Pact {
   constructor(source: Pact) {
     this.id = source.id
     this.name = source.name
-    this.items = source.items.map((item) => new Item(item))
     this.wins = source.wins ?? 0
-    this.stats = new Stats('stats' in source ? source.stats : undefined)
+    this.items = source.items.map((item) => new Item(item))
+    this.stats = new Stats(source.stats)
   }
 
   stealRandomItem(): Item | null {
-    if (this.items.length === 0) return null
+    if (Math.random() > 2 / 3) return null
+
     const randomIndex = Math.floor(Math.random() * this.items.length)
     const [stolenItem] = this.items.splice(randomIndex, 1)
     return stolenItem ?? null
@@ -30,7 +31,6 @@ export class Pact {
 
     while (true) {
       const existingIndex = this.items.findIndex((item) => item.type === currentItem.type)
-
       if (existingIndex !== -1) {
         const [existingItem] = this.items.splice(existingIndex, 1)
         if (existingItem) {
@@ -45,7 +45,7 @@ export class Pact {
     return currentItem
   }
 
-  recalculate(): void {
+  updateStats(): void {
     const statKeys: StatType[] = ['HP', 'ATK', 'DEF']
 
     statKeys.forEach((key) => {

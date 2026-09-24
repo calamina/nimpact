@@ -2,7 +2,7 @@ import type { StatType } from '@/entities/Stat'
 
 export const FIGHT = {
   MAX_IDLE_ROUNDS: 3,
-  MITIGATION_K: 30,
+  MITIGATION_K: 120,
 } as const
 
 export const LEVELUP = {

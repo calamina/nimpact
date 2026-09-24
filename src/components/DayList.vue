@@ -1,75 +1,56 @@
 <script setup lang="ts">
-import { useStore } from '@/store/store'
 import gsap from 'gsap'
-import { watch } from 'vue'
+import { ScrollToPlugin } from 'gsap/all'
+import { ref } from 'vue'
+import { useStore } from '@/composables/useStore'
 
+gsap.registerPlugin(ScrollToPlugin)
 const store = useStore()
+const list = ref<HTMLElement | null>(null)
 
-watch(
-  () => store.activeDay,
-  (newDay) => {
-    if (!newDay) return
-    const container = document.querySelector('.days') as HTMLElement
-    gsap.to(container, {
-      scrollTo: 'max',
-      duration: 0.4,
-      delay: 0.1,
-      ease: 'sine.out',
-    })
-  },
-)
+const scroll = (targetEl: HTMLElement) => {
+  if (!list.value || !targetEl) return
+
+  gsap.to(list.value, {
+    scrollTo: {
+      y: targetEl,
+      offsetY: list.value.clientHeight / 2 - targetEl.clientHeight / 2,
+      autoKill: true,
+    },
+    delay: 0.15,
+    duration: 0.4,
+    ease: 'sine.out',
+  })
+}
 </script>
 
 <template>
-  <div class="days">
-    <a
-      v-for="day in store.days"
-      class="day"
-      :href="'#day' + day?.id"
-      :class="{ 'day-high': day?.tier, 'day-low': day?.id !== store.activeDay?.id }"
-    >
-      Day {{ day?.id }} <span class="star" v-for="_ in day?.tier">✦</span>
-    </a>
-  </div>
+  <section ref="list">
+    <DayCard v-for="day in store.days" :key="day.id" :day="day" @phase-changed="scroll" />
+  </section>
 </template>
 
 <style scoped>
-.days {
-  display: flex;
-  flex-flow: column;
-  gap: 0.25rem;
-  overflow: scroll;
-  overscroll-behavior: contain;
+section {
   width: 100%;
-  padding: 1rem;
-  padding-top: 0;
-}
-
-.day {
+  height: 100svh;
   display: flex;
-  gap: 1ch;
-  text-decoration: none;
-  text-underline-offset: 4px;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  /* padding-bottom: 100svh;  */
+  gap: 6rem;
+  overflow-y: auto;
+  border-radius: 8px;
+  scrollbar-color: #00000020 transparent;
+  box-sizing: border-box;
 
-  &.day-low {
-    color: #00000060;
+  &::after {
+    content: '';
+    display: block;
+    height: 50svh;
+    width: 100%;
+    flex-shrink: 0;
   }
-
-  &.day-high {
-    color: slateblue;
-  }
-
-  &:hover,
-  &:focus-within,
-  &:last-child {
-    &::before {
-      content: '→';
-    }
-  }
-}
-
-.star {
-  display: inline-block;
-  width: 0ch;
 }
 </style>

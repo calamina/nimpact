@@ -13,20 +13,12 @@
 ## TODO
 
 - clean Nim remnants
-  - Search for string
-  - Check nim create and make a new Pact directly (or partial, or extends)
   - Rename project / git
 - check stat for improvement (auto recalc ?)
-
-## Technical
-
-- consolidate behaviours (composables)
-- streamline naming
 
 ## Global
 
 - refactor victory
-  - promote winner to next tier
   - ask for reforge when item type count > 1
     - add interaction
     - add special cases : 10% superb & 10% break
@@ -42,3 +34,4 @@
 - both die : fuse items and add to next day's pool
 - add "*" matching array length for quality
 - random loser becomes ghost fighter
+- Pantheon for Myrie ?

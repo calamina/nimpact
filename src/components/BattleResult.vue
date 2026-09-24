@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Day } from '@/entities/Day'
 
 const { day } = defineProps<{
@@ -23,7 +22,7 @@ const resultMessage = computed(() => MESSAGES[outcome.value ?? '_'])
 
 <template>
   <div class="screen">
-    <BlockLayout v-if="outcome === 'victory' && winner" class="victory">
+    <LayoutBlock v-if="outcome === 'victory' && winner" class="victory">
       <div class="winner">
         <p>{{ resultMessage }}</p>
       </div>
@@ -43,11 +42,11 @@ const resultMessage = computed(() => MESSAGES[outcome.value ?? '_'])
           <p class="color-exp">({{ rewards.stat.value }} {{ rewards.stat.type }})</p>
         </div>
       </div>
-    </BlockLayout>
+    </LayoutBlock>
 
-    <BlockLayout v-else class="unfortunate">
+    <LayoutBlock v-else class="unfortunate">
       {{ resultMessage }}
-    </BlockLayout>
+    </LayoutBlock>
   </div>
 </template>
 
@@ -57,20 +56,10 @@ const resultMessage = computed(() => MESSAGES[outcome.value ?? '_'])
   flex-flow: column;
   align-items: center;
   width: 100%;
-  /* background-color: #0000000a; */
 }
 
-/* .line {
-  flex-shrink: 0;
-  height: 2rem;
-  width: 1px;
-  background-color: #00000050;
-  } */
-
 .screen {
-  /* background-color: #0000000a; */
   display: flex;
-  /* width: 19.5rem; */
   width: fit-content;
   align-items: center;
   justify-content: center;
@@ -80,8 +69,6 @@ const resultMessage = computed(() => MESSAGES[outcome.value ?? '_'])
   display: flex;
   flex-flow: column;
   width: 100%;
-  /* padding: 1rem; */
-  /* gap: 1rem; */
 }
 
 .info {

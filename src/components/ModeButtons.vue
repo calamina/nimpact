@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useStore } from '@/store/store'
+import { useStore } from '@/composables/useStore'
 
 const store = useStore()
 </script>

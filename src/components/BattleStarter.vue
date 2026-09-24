@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import BlockLayout from '@/components/layouts/BlockLayout.vue'
-import type { Day } from '@/entities/Day'
-import { useStore } from '@/store/store'
+import { useStore } from '@/composables/useStore'
 import { computed, onMounted, ref } from 'vue'
+import type { Day } from '@/entities/Day'
 
 const { day } = defineProps<{
   day: Day
@@ -26,12 +25,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <BlockLayout class="fight">
+  <LayoutBlock class="fight">
     <div class="box">
       <button v-if="!started" @click="handleStart">Fight</button>
       <p :class="{ low: day.phase !== 2 }" v-else>{{ resultMessage }}</p>
     </div>
-  </BlockLayout>
+  </LayoutBlock>
 </template>
 
 <style scoped>

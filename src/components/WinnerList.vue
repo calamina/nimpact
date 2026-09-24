@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { Pact } from '@/entities/Pact'
-import NimWinner from '@/features/winner/NimWinner.vue'
-import { useStore } from '@/store/store'
+import { useStore } from '@/composables/useStore'
 import { TIERS, type TierKey } from '@/utils/constants'
 import { computed, ref } from 'vue'
+import type { Winner } from '@/entities/Winner'
 
 const store = useStore()
 
@@ -16,9 +15,9 @@ const sortedTiers = computed(() => {
 
 const hasWinners = computed(() => sortedTiers.value.length > 0)
 
-const selectedPact = ref<Pact | null>(null)
-const setSelectedNim = (pact: Pact) =>
-  (selectedPact.value = selectedPact.value === pact ? null : pact)
+const selectedWinner = ref<Winner | null>(null)
+const setSelectedWinner = (pact: Winner) =>
+  (selectedWinner.value = selectedWinner.value === pact ? null : pact)
 </script>
 
 <template>
@@ -26,12 +25,12 @@ const setSelectedNim = (pact: Pact) =>
     <div v-for="tier in sortedTiers" :key="tier" class="tier">
       <p class="low">{{ TIERS[tier] }} ({{ tier }} wins)</p>
       <template v-for="pact in store.winnerQueue.queues[tier]" :key="pact.id">
-        <button @click="setSelectedNim(pact)">
+        <button @click="setSelectedWinner(pact)">
           {{ pact.name }}
         </button>
-        <NimWinner
-          v-if="selectedPact && selectedPact.id === pact?.id"
-          :pact="selectedPact"
+        <WinnerCard
+          v-if="selectedWinner && selectedWinner.id === pact?.id"
+          :pact="selectedWinner"
           :hideName="true"
         />
       </template>

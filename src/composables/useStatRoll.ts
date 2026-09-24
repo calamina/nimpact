@@ -1,13 +1,13 @@
 import { ref } from 'vue'
 import { Stats } from '@/entities/Stats'
-import { useStore } from '@/store/store'
+import { useStore } from '@/composables/useStore'
 import { DICES } from '@/utils/constants'
 import type { StatType } from '@/entities/Stat'
 
 const rollD = (sides: number) => Math.floor(Math.random() * sides) + 1
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
-export function useDiceRoller() {
+export function useStatRoll() {
   const store = useStore()
   const isComplete = ref(false)
 
