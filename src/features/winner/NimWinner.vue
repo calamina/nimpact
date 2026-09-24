@@ -13,7 +13,7 @@ const { pact, hideName } = defineProps<{ pact?: Pact; hideName?: boolean }>()
     </div>
     <div>
       <p class="low">Stats</p>
-      <p v-for="stat in pact.stats">
+      <p v-for="stat in pact.stats.toArray()">
         <span class="stat">{{ stat.type }}</span>
         <span class="statvalue color-main">{{ stat.total }}</span>
         <span class="low"> [ {{ stat.base }}</span>
@@ -32,7 +32,7 @@ const { pact, hideName } = defineProps<{ pact?: Pact; hideName?: boolean }>()
     </div>
     <div>
       <p class="low">Fight experience</p>
-      <template v-for="stat in pact.stats">
+      <template v-for="stat in pact.stats.toArray()">
         <p v-if="stat.experience" class="color-exp">{{ stat.experience }} {{ stat.type }}</p>
       </template>
     </div>

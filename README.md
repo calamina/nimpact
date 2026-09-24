@@ -1,4 +1,4 @@
-# Nimpact
+# Queen Pact
 
 -> Queen-Pact ! you manage a kingdom where you must find a champion to deafeat ever stronger foes ??
 
@@ -10,10 +10,17 @@
 - Pact-Shand
 - Pact-Myrie -->
 
+## TODO
+
+- clean Nim remnants
+  - Search for string
+  - Check nim create and make a new Pact directly (or partial, or extends)
+  - Rename project / git
+- check stat for improvement (auto recalc ?)
+
 ## Technical
 
 - consolidate behaviours (composables)
-- consolidates models (classes)
 - streamline naming
 
 ## Global
@@ -35,7 +42,3 @@
 - both die : fuse items and add to next day's pool
 - add "*" matching array length for quality
 - random loser becomes ghost fighter
-
-## Fight screen
-
-- add each char's DPS ? (test was not geat)

@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
-import { computed, ref, markRaw } from 'vue'
+import { computed, ref, markRaw, shallowRef } from 'vue'
 import { Pact } from '@/entities/Pact'
 import { Day } from '@/entities/Day'
 import { Battle } from '@/entities/Battle'
 import { BattleQueue } from '@/entities/BattleQueue'
 
-export const useNimStore = defineStore('nim', () => {
-  const completedDays = ref<Day[]>([])
+export const useStore = defineStore('nim', () => {
+  const completedDays = shallowRef<Day[]>([])
   const activeDay = ref<Day | null>(null)
   const queue = ref(new BattleQueue())
   const autofight = ref(false)
@@ -16,12 +16,8 @@ export const useNimStore = defineStore('nim', () => {
     activeDay.value ? [...completedDays.value, activeDay.value] : completedDays.value,
   )
 
-  const init = () => {
-    if (!activeDay.value && completedDays.value.length === 0) startNewDay()
-  }
-
-  const setAutofight = () => (autofight.value = !autofight.value)
-  const setBlitz = () => (blitz.value = !blitz.value)
+  const toggleAutofight = () => (autofight.value = !autofight.value)
+  const toggleBlitz = () => (blitz.value = !blitz.value)
 
   const startNewDay = () => {
     const targetTier = queue.value.getAvailableTier()
@@ -32,32 +28,38 @@ export const useNimStore = defineStore('nim', () => {
       if (pair) activeFighters = pair
     }
 
-    activeDay.value = new Day(completedDays.value.length + 1, targetTier, activeFighters)
+    const dayId = completedDays.value.length + 1
+    activeDay.value = new Day(dayId, targetTier, activeFighters)
   }
 
   const finalizeDay = async (battle: Battle) => {
     if (!activeDay.value) return
+    activeDay.value.finish()
 
-    activeDay.value.concludeBattle()
     queue.value.update(battle.winner, activeDay.value.pacts)
-
-    // Maybe add timer to delay next day button
-    activeDay.value.endDay()
     completedDays.value.push(markRaw(activeDay.value))
     activeDay.value = null
   }
+
+  // const reset = () => {
+  //   completedDays.value = []
+  //   activeDay.value = null
+  //   queue.value = new BattleQueue()
+  //   autofight.value = false
+  //   blitz.value = false
+  //   startNewDay()
+  // }
 
   return {
     days,
     activeDay,
     completedDays,
     winnerQueue: queue,
-    init,
     startNewDay,
     finalizeDay,
     autofight,
-    setAutofight,
+    toggleAutofight,
     blitz,
-    setBlitz,
+    toggleBlitz,
   }
 })

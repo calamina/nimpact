@@ -1,26 +1,29 @@
 <script setup lang="ts">
-import { useNimStore } from '@/store/nims'
+import { useStore } from '@/store/store.ts'
 import NimStats from './NimStats.vue'
 import NimPact from './NimPact.vue'
 import NimName from './NimName.vue'
 import NimItem from './NimItem.vue'
 import { computed, ref } from 'vue'
-import type { Nim, NimStat } from '@/models/nim.model.ts'
-import type { CreateState } from '@/models/create.model.ts'
+import type { Stats } from '@/entities/Stats.ts'
 import { useCreateTransition } from '@/composables/createTransitions.ts'
 import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Item } from '@/entities/Item.ts'
+import { sleep } from '@/utils/utils.ts'
+import type { Pact } from '@/entities/Pact.ts'
+
+type CreateState = 'IDLE' | 'ID' | 'STATS' | 'ITEM' | 'DONE'
 
 const { id } = defineProps<{
   id: number
 }>()
 
-const store = useNimStore()
+const store = useStore()
 const { onPhaseBeforeEnter, onPhaseEnter, onPhaseLeave, onStepBeforeEnter, onStepEnter } =
   useCreateTransition()
 
 const createState = ref<CreateState>('IDLE')
-const draftNim = ref<Partial<Nim>>({})
+const draftNim = ref<Partial<Pact>>({})
 
 const isIdDone = computed(() => ['STATS', 'ITEM', 'DONE'].includes(createState.value))
 const isStatsDone = computed(() => ['ITEM', 'DONE'].includes(createState.value))
@@ -32,23 +35,23 @@ const onIdentityCreated = async (id: string, name: string) => {
   draftNim.value = { id, name }
   createState.value = 'ID'
 
-  await new Promise((resolve) => setTimeout(resolve, time.value.id))
+  await sleep(time.value.id)
   createState.value = 'STATS'
 }
 
-const onStatsCreated = async (stats: NimStat[]) => {
+const onStatsCreated = async (stats: Stats) => {
   draftNim.value.stats = stats
 
-  await new Promise((resolve) => setTimeout(resolve, time.value.stats))
+  await sleep(time.value.stats)
   createState.value = 'ITEM'
 }
 
 const onItemCreated = async (item: Item) => {
   draftNim.value.items = [item]
   createState.value = 'DONE'
-  await new Promise((resolve) => setTimeout(resolve, time.value.item))
+  await sleep(time.value.item)
 
-  store.activeDay?.addNim(draftNim.value as Nim, id)
+  store.activeDay?.addNim(draftNim.value as Pact, id)
 }
 </script>
 

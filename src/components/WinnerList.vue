@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { Pact } from '@/entities/Pact'
 import NimWinner from '@/features/winner/NimWinner.vue'
-import { TIERS, type TierKey } from '@/models/nim.model'
-import { useNimStore } from '@/store/nims'
+import { useStore } from '@/store/store'
+import { TIERS, type TierKey } from '@/utils/constants'
 import { computed, ref } from 'vue'
 
-const store = useNimStore()
+const store = useStore()
 
 const sortedTiers = computed(() => {
   return Object.keys(store.winnerQueue.queues)

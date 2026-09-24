@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Day } from '@/entities/Day'
-import { useNimStore } from '@/store/nims'
+import { useStore } from '@/store/store'
 import { computed, onMounted, ref } from 'vue'
 
 const { day } = defineProps<{
   day: Day
 }>()
 
-const store = useNimStore()
+const store = useStore()
 const started = ref(false)
 
 function handleStart() {
   started.value = true
-  store.activeDay?.startFight()
+  store.activeDay?.startBattle()
 }
 
 const resultMessage = computed(() =>

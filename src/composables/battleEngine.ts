@@ -1,9 +1,10 @@
 import { ref } from 'vue'
-import { useNimStore } from '@/store/nims'
+import { useStore } from '@/store/store'
 import type { Day } from '@/entities/Day'
+import { sleep } from '@/utils/utils'
 
 export function useBattleEngine(day: Day) {
-  const store = useNimStore()
+  const store = useStore()
   const battleState = ref<'IDLE' | 'FIGHTING' | 'FINISHED'>('IDLE')
 
   const TIMER = ref({
@@ -11,15 +12,17 @@ export function useBattleEngine(day: Day) {
     FIGHTING: store.blitz ? 0 : 800,
   })
 
-  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
-
   const runBattle = async () => {
-    if (!day.battle) day.startFight()
+    if (day.battle?.isFinished()) return
+    if (!day.battle) day.startBattle()
     if (!day.battle) return
 
     if (store.blitz) {
+      let maxRounds = 0
       while (!day.battle.isFinished()) {
         day.battle.executeRound()
+        maxRounds++
+        if (maxRounds >= 25) break
       }
     } else {
       while (!day.battle.isFinished()) {
@@ -38,8 +41,8 @@ export function useBattleEngine(day: Day) {
       }
     }
 
+    await sleep(TIMER.value.IDLE)
     battleState.value = 'FINISHED'
-    if (!store.blitz) await sleep(500)
     store.finalizeDay(day.battle)
   }
 

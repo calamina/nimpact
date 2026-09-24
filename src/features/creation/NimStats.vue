@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useDiceRoller } from '@/composables/diceRoller'
-import type { StatConfig } from '@/models/create.model'
-import type { NimStat } from '@/models/nim.model'
-import { useNimStore } from '@/store/nims'
+import { useStore } from '@/store/store'
+import type { Stat } from '@/entities/Stat'
+import type { Stats } from '@/entities/Stats'
 
 const emit = defineEmits<{
-  (e: 'stats', stats: NimStat[]): void
+  (e: 'stats', stats: Stats): void
 }>()
 const { stats, rollAllStats } = useDiceRoller()
 
-const store = useNimStore()
+const store = useStore()
 const time = computed(() => (store.blitz ? 0 : 400))
 
 onMounted(async () => {
@@ -19,7 +19,7 @@ onMounted(async () => {
   emit('stats', result)
 })
 
-const getDroppedIndex = (stat: StatConfig): number => {
+const getDroppedIndex = (stat: Stat): number => {
   if (stat.isRolling || stat.dices <= 1 || stat.values.length < stat.dices) return -1
   return stat.values.indexOf(Math.min(...stat.values))
 }
@@ -29,9 +29,9 @@ const getDroppedIndex = (stat: StatConfig): number => {
   <div class="stats">
     <p class="low">They seem strong</p>
     <div class="stats-container">
-      <div v-for="stat in stats" :key="stat.name" class="stat-row">
+      <div v-for="stat in stats.toArray()" :key="stat.type" class="stat-row">
         <div class="stat-header">
-          <span class="name">{{ stat.name }}</span>
+          <span class="name">{{ stat.type }}</span>
           <span v-if="!stat.isRolling && stat.values.length" class="total">({{ stat.total }})</span>
         </div>
 

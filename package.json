@@ -1,6 +1,6 @@
 {
-  "name": "nimpact",
-  "version": "0.0.0",
+  "name": "queen-pact",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -29,11 +29,8 @@
     "vite-plugin-vue-devtools": "^8.1.5",
     "vue-tsc": "^3.3.7"
   },
-  "engines": {
-    "node": "^22.18.0 || >=24.12.0"
-  },
   "overrides": {
-    "vue": "rc",
+    "@vue/compat": "rc",
     "@vue/compiler-core": "rc",
     "@vue/compiler-dom": "rc",
     "@vue/compiler-sfc": "rc",
@@ -45,6 +42,9 @@
     "@vue/runtime-vapor": "rc",
     "@vue/server-renderer": "rc",
     "@vue/shared": "rc",
-    "@vue/compat": "rc"
+    "vue": "rc"
+  },
+  "engines": {
+    "node": "^22.18.0 || >=24.12.0"
   }
 }

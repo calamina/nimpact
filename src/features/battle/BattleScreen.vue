@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
 import NimCard from '../card/NimCard.vue'
-import { useBattleEngine } from '@/composables/battleEngine.ts'
 import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Day } from '@/entities/Day.ts'
+import { useBattleEngine } from '@/composables/BattleEngine.ts'
 
 const props = defineProps<{
   day: Day

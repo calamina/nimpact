@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useNimStore } from '@/store/nims'
+import { useStore } from '@/store/store'
 import { adjectives, names, uniqueNamesGenerator } from 'unique-names-generator'
 import { onMounted } from 'vue'
 
-const store = useNimStore()
+const store = useStore()
 
 const emit = defineEmits<{
   (e: 'id', id: string, name: string): void

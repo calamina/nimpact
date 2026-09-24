@@ -29,7 +29,7 @@ export class BattleQueue {
     const queue = this.queues[tier]
     if (queue && queue.length >= 2) {
       const [f1, f2] = queue
-      if (f1 && f2) return [f1.clone(), f2.clone()]
+      if (f1 && f2) return [f1, f2]
     }
     return null
   }

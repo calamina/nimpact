@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { useNimStore } from '@/store/nims'
+import { useStore } from '@/store/store.ts'
 import TimelineTransition from './TimelineTransition.vue'
 import TimelineDay from './TimelineDay.vue'
 import NimCreate from '../creation/NimCreate.vue'
 import NimWinner from '../winner/NimWinner.vue'
-import FightStart from '../fight/FightStart.vue'
-import FightScreen from '../fight/FightScreen.vue'
+import BattleStart from '../battle/BattleStart.vue'
+import BattleScreen from '../battle/BattleScreen.vue'
 import Result from '../result/Result.vue'
 import TimelineNextDay from './TimelineNextDay.vue'
 import { DayPhase, DayType } from '@/entities/Day.ts'
 
-const store = useNimStore()
+const store = useStore()
 </script>
 
 <template>
@@ -26,17 +26,17 @@ const store = useNimStore()
           <NimCreate :id="2" />
         </div>
         <div class="creation" v-if="day.type === DayType.WINNERSHIP">
-          <NimWinner :nim="day.pacts[0]" />
-          <NimWinner :nim="day.pacts[1]" />
+          <NimWinner :pact="day.pacts[0]" />
+          <NimWinner :pact="day.pacts[1]" />
         </div>
       </TimelineTransition>
 
       <TimelineTransition :noscroll="true">
-        <FightStart v-if="day.phase >= DayPhase.READY" :day="day" />
+        <BattleStart v-if="day.phase >= DayPhase.READY" :day="day" />
       </TimelineTransition>
 
       <TimelineTransition>
-        <FightScreen v-if="day.phase >= DayPhase.FIGHTING" :day="day" />
+        <BattleScreen v-if="day.phase >= DayPhase.FIGHTING" :day="day" />
       </TimelineTransition>
 
       <TimelineTransition>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Day } from '@/entities/Day'
-import { TIERS, type TierKey } from '@/models/nim.model'
+import { TIERS, type TierKey } from '@/utils/constants'
 import gsap from 'gsap'
 import { onMounted } from 'vue'
 const { day } = defineProps<{ day: Day }>()

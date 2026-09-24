@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BlockLayout from '@/components/layouts/BlockLayout.vue'
 import type { Day } from '@/entities/Day'
-import { useNimStore } from '@/store/nims'
+import { useStore } from '@/store/store'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/all'
 import { computed, onMounted, ref } from 'vue'
@@ -21,7 +21,7 @@ const MESSAGES = {
   _: '???',
 } as const
 
-const store = useNimStore()
+const store = useStore()
 
 const outcome = computed(() => day.battle?.outcome)
 const message = computed(() => MESSAGES[outcome.value ?? '_'])

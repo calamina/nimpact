@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { useNimStore } from '@/store/nims'
+import { useStore } from '@/store/store'
 
-const store = useNimStore()
+const store = useStore()
 </script>
 
 <template>
   <div class="autofight">
-    <button class="autobutton" :class="{ low: !store.autofight }" @click="store.setAutofight">
+    <button class="autobutton" :class="{ low: !store.autofight }" @click="store.toggleAutofight">
       autofight <span v-if="store.autofight" class="autoanim"></span>
     </button>
-    <button class="autobutton" :class="{ low: !store.blitz }" @click="store.setBlitz">
+    <button class="autobutton" :class="{ low: !store.blitz }" @click="store.toggleBlitz">
       blitz <span v-if="store.blitz" class="autoanim"></span>
     </button>
   </div>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useNimStore } from '@/store/nims'
+import { useStore } from '@/store/store'
 import gsap from 'gsap'
 import { watch } from 'vue'
 
-const store = useNimStore()
+const store = useStore()
 
 watch(
   () => store.activeDay,

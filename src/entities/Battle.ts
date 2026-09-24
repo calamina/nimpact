@@ -1,6 +1,7 @@
 import { Pact } from './Pact'
 import { Item } from './Item'
-import type { NimStatBonus, Stat } from '@/models/nim.model'
+import { FIGHT, LEVELUP } from '@/utils/constants'
+import type { StatType } from './Stat'
 
 export type BattleOutcome = 'victory' | 'stalemate' | 'unfortunate'
 
@@ -13,12 +14,12 @@ export class Battle {
   loser: Pact | null = null
   rewards: {
     item: Item | null
-    stat: NimStatBonus | null
+    stat: { type: StatType; value: number } | null
   } = { item: null, stat: null }
 
   constructor(p1: Pact, p2: Pact) {
-    this.p1 = p1.clone()
-    this.p2 = p2.clone()
+    this.p1 = p1
+    this.p2 = p2
   }
 
   executeRound(): void {
@@ -35,7 +36,7 @@ export class Battle {
     if (!p1Alive || !p2Alive) return true
 
     if (
-      this.round === 3 &&
+      this.round >= FIGHT.MAX_IDLE_ROUNDS &&
       this.p1.stats.HP.current === this.p1.stats.HP.total &&
       this.p2.stats.HP.current === this.p2.stats.HP.total
     ) {
@@ -46,6 +47,8 @@ export class Battle {
   }
 
   finish(): void {
+    if (this.outcome !== 'stalemate' || this.winner !== null) return
+
     const p1Alive = this.p1.stats.HP.current > 0
     const p2Alive = this.p2.stats.HP.current > 0
 
@@ -60,16 +63,16 @@ export class Battle {
     }
 
     this.outcome = 'victory'
-    this.winner = p1Alive ? this.p1.clone() : this.p2.clone()
-    this.loser = p1Alive ? this.p2.clone() : this.p1.clone()
+    this.winner = p1Alive ? this.p1 : this.p2
+    this.loser = p1Alive ? this.p2 : this.p1
 
     const stolenItem = this.loser.stealRandomItem()
 
-    const statTypes: Stat[] = ['ATK', 'DEF', 'HP']
+    const statTypes: StatType[] = ['ATK', 'DEF', 'HP']
     const selectedType = statTypes[Math.floor(Math.random() * statTypes.length)] ?? 'HP'
-    const statBonus: NimStatBonus = {
+    const statBonus = {
       type: selectedType,
-      value: selectedType === 'HP' ? 5 : 1,
+      value: selectedType === 'HP' ? LEVELUP.HP_VALUE : LEVELUP.DEFAULT_VALUE,
     }
 
     this.winner.stats[statBonus.type].experience += statBonus.value
@@ -80,7 +83,7 @@ export class Battle {
     this.winner.recalculate()
 
     this.rewards = {
-      item: rewardedItem ? rewardedItem.clone() : null,
+      item: rewardedItem ? rewardedItem : null,
       stat: statBonus,
     }
   }

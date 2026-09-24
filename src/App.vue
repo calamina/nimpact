@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useNimStore } from './store/nims'
+import { useStore } from './store/store.ts'
 import TimelineView from './features/Timeline/TimelineView.vue'
 import SidebarLayout from './components/layouts/SidebarLayout.vue'
 import ModeButtons from './components/ModeButtons.vue'
 import DayList from './components/DayList.vue'
 import WinnerList from './components/WinnerList.vue'
 
-const store = useNimStore()
-onMounted(() => store.init())
+const store = useStore()
+onMounted(() => store.startNewDay())
 </script>
 
 <template>
