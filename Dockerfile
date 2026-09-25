@@ -1,12 +1,13 @@
-# ---- Build Stage ----
-FROM node:22-alpine AS builder
+FROM oven/bun:alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm ci
+
+COPY package.json bun.lock* ./
+RUN bun install --frozen-lockfile
 
 COPY . .
 
-RUN npm run build
+RUN bun run build
+
 FROM nginx:alpine AS runner
 COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80

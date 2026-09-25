@@ -12,9 +12,8 @@
 
 ## TODO
 
-- clean Nim remnants
-  - Rename project / git
 - check stat for improvement (auto recalc ?)
+- check perf for blitz + high day count
 
 ## Global
 
@@ -25,7 +24,7 @@
     - add auto reforge/pick best
 - add compact card for winners ? or bottom pannel on hover/focus
 - make days appear w/ transition
-- random bonus to some nimpacters ?
+- random bonus to some pacts ?
 
 ## Victory
 

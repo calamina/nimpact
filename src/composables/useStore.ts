@@ -5,7 +5,7 @@ import { BattleQueue } from '@/entities/BattleQueue'
 import type { Battle } from '@/entities/Battle'
 import type { Pact } from '@/entities/Pact'
 
-export const useStore = defineStore('nim', () => {
+export const useStore = defineStore('store', () => {
   const completedDays = shallowRef<Day[]>([])
   const activeDay = ref<Day | null>(null)
   const queue = ref(new BattleQueue())

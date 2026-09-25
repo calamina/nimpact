@@ -61,7 +61,7 @@ const onItemCreated = async (item: Item) => {
     >
       <CreatePact v-if="createState === 'IDLE'" @id="onIdentityCreated" />
 
-      <div v-else-if="draftPact.name" class="nim">
+      <div v-else-if="draftPact.name" class="pact">
         <CreateName :name="draftPact.name" />
 
         <Transition :css="false" @before-enter="onStepBeforeEnter" @enter="onStepEnter">
@@ -84,7 +84,7 @@ const onItemCreated = async (item: Item) => {
   height: 22.4rem;
 }
 
-.nim {
+.pact {
   display: flex;
   flex-flow: column;
   gap: 1rem;
