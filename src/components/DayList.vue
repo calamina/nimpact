@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/all'
 import { ref } from 'vue'
 import { useStore } from '@/composables/useStore'
+import DayCard from './DayCard.vue'
 
 gsap.registerPlugin(ScrollToPlugin)
 const store = useStore()

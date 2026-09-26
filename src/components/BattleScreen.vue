@@ -2,6 +2,8 @@
 import { onMounted, computed } from 'vue'
 import { useBattle } from '@/composables/useBattle.ts'
 import type { Day } from '@/entities/Day.js'
+import BattlePact from './BattlePact.vue'
+import LayoutBlock from './layouts/LayoutBlock.vue'
 
 const props = defineProps<{
   day: Day

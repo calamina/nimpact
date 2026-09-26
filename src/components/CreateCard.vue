@@ -6,6 +6,11 @@ import { sleep } from '@/utils/utils'
 import type { Stats } from '@/entities/Stats.ts'
 import type { Item } from '@/entities/Item.ts'
 import type { Pact } from '@/entities/Pact.ts'
+import LayoutBlock from './layouts/LayoutBlock.vue'
+import CreatePact from './CreatePact.vue'
+import CreateName from './CreateName.vue'
+import CreateStatList from './CreateStatList.vue'
+import CreateItem from './CreateItem.vue'
 
 type CreateState = 'IDLE' | 'ID' | 'STATS' | 'ITEM' | 'DONE'
 
@@ -65,7 +70,7 @@ const onItemCreated = async (item: Item) => {
         <CreateName :name="draftPact.name" />
 
         <Transition :css="false" @before-enter="onStepBeforeEnter" @enter="onStepEnter">
-          <CreateStats v-if="isIdDone" @stats="onStatsCreated" />
+          <CreateStatList v-if="isIdDone" @stats="onStatsCreated" />
         </Transition>
 
         <Transition :css="false" @before-enter="onStepBeforeEnter" @enter="onStepEnter">

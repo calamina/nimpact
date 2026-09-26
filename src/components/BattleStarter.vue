@@ -2,6 +2,7 @@
 import { useStore } from '@/composables/useStore'
 import { computed, onMounted, ref } from 'vue'
 import type { Day } from '@/entities/Day'
+import LayoutBlock from './layouts/LayoutBlock.vue'
 
 const { day } = defineProps<{
   day: Day

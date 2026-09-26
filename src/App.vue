@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useStore } from './composables/useStore.ts'
+import LayoutSidebar from './components/layouts/LayoutSidebar.vue'
+import ModeButtons from './components/ModeButtons.vue'
+import DayIndex from './components/DayIndex.vue'
+import DayList from './components/DayList.vue'
+import WinnerList from './components/WinnerList.vue'
 
 const store = useStore()
 onMounted(() => store.startNewDay())
@@ -27,5 +32,9 @@ main {
   grid-template-columns: 20% 60% 20%;
   height: 100svh;
   width: 100vw;
+
+  @media screen and (max-width: 900px) {
+    grid-template-columns: 0 1fr 0;
+  }
 }
 </style>

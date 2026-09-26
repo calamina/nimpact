@@ -1,5 +1,5 @@
 import type { Battle } from '@/entities/Battle'
-import { Winner } from './Winner'
+import { Winner } from '@/entities/Winner'
 import { Pact } from '@/entities/Pact'
 
 export class BattleQueue {

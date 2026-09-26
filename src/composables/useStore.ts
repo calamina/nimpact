@@ -32,10 +32,10 @@ export const useStore = defineStore('store', () => {
     activeDay.value = new Day(dayId, targetTier, activeFighters)
   }
 
-  const finalizeDay = async (battle: Battle) => {
+  const finalizeDay = async () => {
     if (!activeDay.value) return
     activeDay.value.finish()
-    queue.value.update(battle)
+    queue.value.update(activeDay.value.battle as Battle)
     completedDays.value.push(markRaw(activeDay.value))
     activeDay.value = null
   }
@@ -52,7 +52,6 @@ export const useStore = defineStore('store', () => {
   return {
     days,
     activeDay,
-    completedDays,
     winnerQueue: queue,
     startNewDay,
     finalizeDay,

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Pact } from '@/entities/Pact'
 import { computed } from 'vue'
+import LayoutBlock from './layouts/LayoutBlock.vue'
 
 const { pact } = defineProps<{
   pact: Pact

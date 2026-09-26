@@ -1,27 +1,6 @@
 @import url('./reset.css');
 @import url('./utils.css');
+@import url('./default.css');
 
 /* @layer reset, defaults, patterns, components, utilities, overrides; */
 @layer reset, default, utilities;
-
-@layer default {
-  body {
-    background-color: #eee;
-  }
-
-  #app {
-    width: 100%;
-  }
-
-  @font-face {
-    font-display: swap;
-    font-family: 'Departure Mono';
-    font-style: normal;
-    font-weight: 500;
-    src: url('./fonts/DepartureMono-Regular.woff2') format('woff2');
-  }
-
-  * {
-    font-family: 'Departure Mono';
-  }
-}

@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { Day } from '@/entities/Day'
+import { computed, toRaw } from 'vue'
+import LayoutBlock from './layouts/LayoutBlock.vue'
+import type { Battle } from '@/entities/Battle.ts'
 
-const { day } = defineProps<{
-  day: Day
+const { battle } = defineProps<{
+  battle: Battle
 }>()
 
-const winner = computed(() => day.battle?.winner)
-const outcome = computed(() => day.battle?.outcome)
-const rewards = computed(() => day.battle?.rewards)
+const { winner, outcome, rewards } = battle
 
 const MESSAGES = {
   victory: 'Victory !',
@@ -17,7 +16,7 @@ const MESSAGES = {
   _: '???',
 } as const
 
-const resultMessage = computed(() => MESSAGES[outcome.value ?? '_'])
+const resultMessage = computed(() => MESSAGES[outcome ?? '_'])
 </script>
 
 <template>
@@ -36,6 +35,7 @@ const resultMessage = computed(() => MESSAGES[outcome.value ?? '_'])
             <span class="color-item">({{ rewards.item.value }} {{ rewards.item.type }})</span>
           </p>
         </div>
+        <p v-else class="low">They got nothing ...</p>
 
         <div v-if="rewards?.stat">
           <p class="low">They learned something</p>

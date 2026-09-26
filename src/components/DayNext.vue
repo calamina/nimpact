@@ -2,6 +2,7 @@
 import { useStore } from '@/composables/useStore'
 import { computed, onMounted, ref } from 'vue'
 import type { Day } from '@/entities/Day'
+import LayoutBlock from './layouts/LayoutBlock.vue'
 
 const { day } = defineProps<{
   day: Day
@@ -71,23 +72,7 @@ p {
 }
 
 button {
-  display: flex;
-  gap: 2ch;
-  align-items: center;
-  justify-content: center;
   background-color: #6a5acd44;
-  transition: gap 0.125s ease-out;
-
-  &:hover,
-  &:focus-within {
-    gap: 3ch;
-  }
-
-  &::before,
-  &::after {
-    content: '▪';
-    color: slateblue;
-  }
 }
 
 p {

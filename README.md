@@ -12,6 +12,7 @@
 
 ## TODO
 
+- rerun Fallow and reduce complexity
 - check stat for improvement (auto recalc ?)
 - check perf for blitz + high day count
 

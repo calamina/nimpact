@@ -1,6 +1,13 @@
 <script setup lang="ts">
-import { Day, DayPhase, DayType } from '@/entities/Day.ts'
+import { DayPhase, DayType, type Day } from '@/entities/Day.ts'
 import { nextTick, onMounted, useTemplateRef, watch } from 'vue'
+import DayHeader from './DayHeader.vue'
+import CreateCard from './CreateCard.vue'
+import WinnerCard from './WinnerCard.vue'
+import BattleStarter from './BattleStarter.vue'
+import BattleScreen from './BattleScreen.vue'
+import BattleResult from './BattleResult.vue'
+import DayNext from './DayNext.vue'
 
 const { day } = defineProps<{ day: Day }>()
 
@@ -35,7 +42,7 @@ watch(() => day.phase, phaseChanged)
 
     <BattleStarter v-if="day.phase >= DayPhase.READY" :day="day" />
     <BattleScreen v-if="day.phase >= DayPhase.FIGHTING" :day="day" />
-    <BattleResult v-if="day.phase >= DayPhase.RESULT" :day="day" />
+    <BattleResult v-if="day.phase >= DayPhase.RESULT && day.battle" :battle="day.battle" />
 
     <!-- TODO :: add reforge / stat selection here ! -->
     <DayNext :day="day" v-if="day.phase >= DayPhase.END" />

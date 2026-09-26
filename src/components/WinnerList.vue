@@ -3,6 +3,7 @@ import { useStore } from '@/composables/useStore'
 import { TIERS, type TierKey } from '@/utils/constants'
 import { computed, ref } from 'vue'
 import type { Winner } from '@/entities/Winner'
+import WinnerCard from './WinnerCard.vue'
 
 const store = useStore()
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Pact } from '@/entities/Pact'
+import LayoutBlock from './layouts/LayoutBlock.vue'
 
 const { pact, hideName } = defineProps<{ pact?: Pact; hideName?: boolean }>()
 </script>

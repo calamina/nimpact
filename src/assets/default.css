@@ -1,0 +1,29 @@
+@layer default {
+  html {
+    font-size: 20px;
+
+    @media screen and (max-width: 900px) {
+      font-size: 15px;
+    }
+  }
+
+  body {
+    background-color: #eee;
+  }
+
+  #app {
+    width: 100%;
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: 'Departure Mono';
+    font-style: normal;
+    font-weight: 500;
+    src: url('./fonts/DepartureMono-Regular.woff2') format('woff2');
+  }
+
+  * {
+    font-family: 'Departure Mono';
+  }
+}

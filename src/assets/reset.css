@@ -1,18 +1,22 @@
 @layer reset {
+
   *,
   *::before,
   *::after {
     box-sizing: border-box;
   }
+
   * {
     margin: 0;
     padding: 0;
     min-width: 0;
     font-family: monospace;
   }
+
   [hidden] {
     display: none !important;
   }
+
   @media (prefers-reduced-motion: no-preference) {
     html {
       interpolate-size: allow-keywords;
@@ -22,7 +26,6 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    font-size: 20px;
     scrollbar-gutter: stable;
     overscroll-behavior: contain;
   }
@@ -30,10 +33,11 @@
   body {
     min-height: 100vh;
     min-height: 100svh;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: none;
     font-smooth: always;
-    text-rendering: optimizeLegibility;
+    text-rendering: optimizeSpeed;
+    image-rendering: pixelated;
     line-height: 1.5;
   }
 
@@ -142,9 +146,11 @@
     position: relative;
     vertical-align: baseline;
   }
+
   sub {
     bottom: -0.25em;
   }
+
   sup {
     top: -0.5em;
   }
@@ -161,6 +167,7 @@
   q {
     quotes: none;
   }
+
   blockquote::before,
   blockquote::after,
   q::before,
